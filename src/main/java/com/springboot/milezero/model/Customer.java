@@ -39,7 +39,7 @@ public class Customer {
 
     private boolean isActive = true;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 

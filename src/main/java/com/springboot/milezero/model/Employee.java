@@ -26,11 +26,13 @@ public class Employee {
     @Column(nullable = false)
     private String phone;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    //private Branch branch
+    @ManyToOne
+    @JoinColumn(name = "branch_id", nullable = false)
+    private Branch branch;
 
     @CreationTimestamp
     private Instant createdAt;
