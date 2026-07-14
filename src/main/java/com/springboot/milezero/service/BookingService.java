@@ -12,8 +12,9 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -41,9 +42,11 @@ public class BookingService {
         //Validate addon ids
         List<BookingAddonDto> list = bookingReqDto.bookingAddons();
 
-        list.forEach(bookingAddonDto ->
+        List<Addon> addons = list.stream()
+                .map(bookingAddonDto ->
                 addonRepository.findById(bookingAddonDto.addonId())
-                .orElseThrow(() -> new ResourceNotFoundException("Addon not found")));
+                .orElseThrow(() -> new ResourceNotFoundException("Addon not found for id :"+bookingAddonDto.addonId())))
+                .toList();
 
         // Get booking from dto using mapper
         Booking booking = BookingReqMapper.convertDtoToEntity(bookingReqDto);
@@ -55,20 +58,24 @@ public class BookingService {
         booking.setReturnBranch(returnBranch);
 
         // Add booking to db
-        booking = bookingRepository.save(booking);
+        final Booking savedBooking = bookingRepository.save(booking);
+
+        // Create a map < 1, Addon{1,Gps,Price} > <Long,Addon>
+        Map<Long, Addon> addonMap = addons.stream()
+                .collect(Collectors.toMap(
+                        Addon::getId,
+                        addon -> addon
+                ));
 
         // Get addon from dto using mapper
         // And attach addon(addon_id) and booking(booking_id) to bookingAddons
-
-        List<BookingAddon> bookingAddons = new ArrayList<>();
-
-        for(BookingAddonDto b : list){
-            BookingAddon bookingAddon = BookingAddonReqMapper.convertDtoToEntity(b);
-            bookingAddon.setBooking(booking);
-            bookingAddon.setAddon(addonRepository.findById(b.addonId()).get());
-            bookingAddonRepository.save(bookingAddon);
-            bookingAddons.add(bookingAddon);
-        }
+        List<BookingAddon> bookingAddons = list.stream()
+                .map(dto -> {
+                    BookingAddon bookingAddon = BookingAddonReqMapper.convertDtoToEntity(dto);
+                    bookingAddon.setBooking(savedBooking);
+                    bookingAddon.setAddon(addonMap.get(dto.addonId()));
+                    return bookingAddon;
+                }).toList();
 
         // Add bookingAddons to db
         bookingAddonRepository.saveAll(bookingAddons);
