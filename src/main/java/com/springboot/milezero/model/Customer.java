@@ -37,8 +37,6 @@ public class Customer {
 
     private String insurancePolicyNo;
 
-    private boolean isActive = true;
-
     @OneToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
