@@ -1,6 +1,5 @@
 package com.springboot.milezero.dto.request;
 
-import com.springboot.milezero.enums.Designation;
 import com.springboot.milezero.enums.Role;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
@@ -12,8 +11,6 @@ public record EmployeeReqDto(
 
         @NotBlank (message = "Field cannot be null")
         String phone,
-
-        Designation designation,
 
         @Pattern(regexp = "^[A-Za-z0-9]+@[A-Za-z]+\\.[A-Za-z]+$", message = "Provide valid email address")
         String email,

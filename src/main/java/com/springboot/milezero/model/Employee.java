@@ -1,6 +1,5 @@
 package com.springboot.milezero.model;
 
-import com.springboot.milezero.enums.Designation;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -26,9 +25,6 @@ public class Employee {
 
     @Column(nullable = false)
     private String phone;
-
-    @Enumerated(EnumType.STRING)
-    private Designation designation;
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)

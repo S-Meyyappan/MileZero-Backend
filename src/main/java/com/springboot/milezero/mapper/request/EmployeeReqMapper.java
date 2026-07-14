@@ -9,7 +9,6 @@ public class EmployeeReqMapper {
         Employee employee = new Employee();
         employee.setName(dto.name());
         employee.setPhone(dto.phone());
-        employee.setDesignation(dto.designation());
         return employee;
     }
 }
