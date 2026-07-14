@@ -1,5 +1,7 @@
 package com.springboot.milezero.config;
 
+import com.springboot.milezero.dto.response.ErrorResponseDto;
+import com.springboot.milezero.exception.ResourceNotFoundException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
@@ -30,5 +32,14 @@ public class GlobalExceptionHandler {
         return ResponseEntity
                 .badRequest()
                 .body(map);
+    }
+
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ResponseEntity<ErrorResponseDto> handleResourceNotFoundException(ResourceNotFoundException e) {
+        return ResponseEntity
+                .badRequest()
+                .body(
+                        new ErrorResponseDto(e.getMessage())
+                );
     }
 }
