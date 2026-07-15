@@ -1,10 +1,9 @@
 package com.springboot.milezero.dto.request;
 
-import com.springboot.milezero.enums.BookingStatus;
+import com.springboot.milezero.enums.BookingType;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PositiveOrZero;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -16,19 +15,7 @@ public record BookingReqDto(
         LocalDateTime plannedReturn,
 
         @PositiveOrZero(message = "Included kilometers can't be negative")
-        int includedKm,
-
-        @NotNull(message = "Booked rate can't be empty")
-        BigDecimal bookedRate,
-
-        @NotNull(message = "Estimated cost can't be empty")
-        BigDecimal estimatedCost,
-
-        @NotNull(message = "Final cost can't be empty")
-        BigDecimal finalCost,
-
-        @NotNull(message = "Booking status can't be empty")
-        BookingStatus bookingStatus,
+        int requestedKm,
 
         @NotNull(message = "Customer ID can't be empty")
         Long customerId,
@@ -41,6 +28,8 @@ public record BookingReqDto(
 
         @NotNull(message = "Return branch ID can't be empty")
         Long returnBranchId,
+
+        BookingType bookingType,
 
         List<BookingAddonDto> bookingAddons //List of Addon ids
 ) {

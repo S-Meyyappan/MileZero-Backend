@@ -1,11 +1,14 @@
 package com.springboot.milezero.model;
 
 import com.springboot.milezero.enums.BookingStatus;
+import com.springboot.milezero.enums.BookingType;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
+import java.time.Instant;
 import java.time.LocalDateTime;
 
 @Entity
@@ -36,11 +39,14 @@ public class Booking {
     @Column(nullable = false)
     private BigDecimal estimatedCost;
 
-    @Column(nullable = false)
-    private BigDecimal finalCost;
+    @Column(nullable = true)
+    private BigDecimal finalCost; // Added during return
 
     @Enumerated(EnumType.STRING)
     private BookingStatus bookingStatus;
+
+    @Enumerated(EnumType.STRING)
+    private BookingType bookingType;
 
     @ManyToOne
     @JoinColumn(name = "customer_id", nullable = false)
@@ -59,7 +65,12 @@ public class Booking {
     private Branch returnBranch;
 
     @ManyToOne
-    @JoinColumn(name = "vehicle_id", nullable = true)
+    @JoinColumn(name = "vehicle_id", nullable = true) // Added during pickup
     private Vehicle vehicle;
 
+    @CreationTimestamp
+    private Instant createdAt;
+
+    @UpdateTimestamp
+    private Instant updatedAt;
 }

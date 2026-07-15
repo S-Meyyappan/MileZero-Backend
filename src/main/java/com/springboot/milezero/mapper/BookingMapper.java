@@ -1,6 +1,7 @@
 package com.springboot.milezero.mapper;
 
 import com.springboot.milezero.dto.request.BookingReqDto;
+import com.springboot.milezero.enums.BookingStatus;
 import com.springboot.milezero.model.Booking;
 
 public class BookingMapper {
@@ -13,11 +14,9 @@ public class BookingMapper {
         Booking booking = new Booking();
         booking.setPlannedPickup(dto.plannedPickup());
         booking.setPlannedReturn(dto.plannedReturn());
-        booking.setIncludedKm(dto.includedKm());
-        booking.setBookedRate(dto.bookedRate());
-        booking.setEstimatedCost(dto.estimatedCost());
-        booking.setFinalCost(dto.finalCost());
-        booking.setBookingStatus(dto.bookingStatus());
+        booking.setIncludedKm(dto.requestedKm());
+        booking.setBookingType(dto.bookingType());
+        booking.setBookingStatus(BookingStatus.BOOKED);
         return booking;
     }
 }

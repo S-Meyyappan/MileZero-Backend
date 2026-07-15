@@ -2,6 +2,10 @@ package com.springboot.milezero.model;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
+import java.time.Instant;
 
 @Entity
 @Table(name = "booking_addon")
@@ -26,4 +30,10 @@ public class BookingAddon {
     @ManyToOne
     @JoinColumn(name = "addon_id", nullable = false)
     private  Addon addon;
+
+    @CreationTimestamp
+    private Instant createdAt;
+
+    @UpdateTimestamp
+    private Instant updatedAt;
 }
