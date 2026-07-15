@@ -21,7 +21,8 @@ public record EmployeeReqDto(
         @Size(min = 6, max = 15, message = "Password must be within 6 to 15 chars")
         String password,
 
-        Role role
+        Role role,
 
+        long branchId
 ) {
 }
