@@ -1,9 +1,13 @@
-package com.springboot.milezero.mapper.request;
+package com.springboot.milezero.mapper;
 
 import com.springboot.milezero.dto.request.EmployeeReqDto;
 import com.springboot.milezero.model.Employee;
 
-public class EmployeeReqMapper {
+public class EmployeeMapper {
+
+    private EmployeeMapper() {
+        /* This utility class should not be instantiated */
+    }
 
     public static Employee convertDtoToEntity(EmployeeReqDto dto){
         Employee employee = new Employee();

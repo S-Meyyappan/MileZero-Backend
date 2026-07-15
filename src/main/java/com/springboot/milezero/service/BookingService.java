@@ -3,8 +3,8 @@ package com.springboot.milezero.service;
 import com.springboot.milezero.dto.request.BookingAddonDto;
 import com.springboot.milezero.dto.request.BookingReqDto;
 import com.springboot.milezero.exception.ResourceNotFoundException;
-import com.springboot.milezero.mapper.request.BookingAddonReqMapper;
-import com.springboot.milezero.mapper.request.BookingReqMapper;
+import com.springboot.milezero.mapper.BookingAddonMapper;
+import com.springboot.milezero.mapper.BookingMapper;
 import com.springboot.milezero.model.*;
 import com.springboot.milezero.repository.*;
 import jakarta.transaction.Transactional;
@@ -49,7 +49,7 @@ public class BookingService {
                 .toList();
 
         // Get booking from dto using mapper
-        Booking booking = BookingReqMapper.convertDtoToEntity(bookingReqDto);
+        Booking booking = BookingMapper.convertDtoToEntity(bookingReqDto);
 
         // Attach customer, category, pickup branch, return branch to booking
         booking.setCustomer(customer);
@@ -71,7 +71,7 @@ public class BookingService {
         // And attach addon(addon_id) and booking(booking_id) to bookingAddons
         List<BookingAddon> bookingAddons = list.stream()
                 .map(dto -> {
-                    BookingAddon bookingAddon = BookingAddonReqMapper.convertDtoToEntity(dto);
+                    BookingAddon bookingAddon = BookingAddonMapper.convertDtoToEntity(dto);
                     bookingAddon.setBooking(savedBooking);
                     bookingAddon.setAddon(addonMap.get(dto.addonId()));
                     return bookingAddon;

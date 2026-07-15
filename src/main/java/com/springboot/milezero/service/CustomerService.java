@@ -2,8 +2,8 @@ package com.springboot.milezero.service;
 
 import com.springboot.milezero.dto.request.CustomerReqDto;
 import com.springboot.milezero.enums.Role;
-import com.springboot.milezero.mapper.request.CustomerReqMapper;
-import com.springboot.milezero.mapper.request.UserReqMapper;
+import com.springboot.milezero.mapper.CustomerMapper;
+import com.springboot.milezero.mapper.UserMapper;
 import com.springboot.milezero.model.Customer;
 import com.springboot.milezero.model.User;
 import com.springboot.milezero.repository.CustomerRepository;
@@ -20,13 +20,13 @@ public class CustomerService {
 
     public void add(CustomerReqDto customerReqDto) {
         // 1. Get user from mapper
-        User user = UserReqMapper.convertDtoToEntity(customerReqDto.email(),
+        User user = UserMapper.convertDtoToEntity(customerReqDto.email(),
                                                     customerReqDto.password(),
                                                     Role.CUSTOMER);
         user = userRepository.save(user);
 
         // 2. Get Customer from mapper
-        Customer customer = CustomerReqMapper.convertDtoToEntity(customerReqDto);
+        Customer customer = CustomerMapper.convertDtoToEntity(customerReqDto);
 
         // 3. Add user to customer
         customer.setUser(user);

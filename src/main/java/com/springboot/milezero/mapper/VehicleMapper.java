@@ -1,9 +1,13 @@
-package com.springboot.milezero.mapper.request;
+package com.springboot.milezero.mapper;
 
 import com.springboot.milezero.dto.request.VehicleReqDto;
 import com.springboot.milezero.model.Vehicle;
 
-public class VehicleReqMapper {
+public class VehicleMapper {
+
+    private VehicleMapper() {
+        /* This utility class should not be instantiated */
+    }
 
     public static Vehicle convertDtoToEntity(VehicleReqDto dto) {
         Vehicle vehicle = new Vehicle();

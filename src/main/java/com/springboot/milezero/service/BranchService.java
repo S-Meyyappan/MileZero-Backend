@@ -2,12 +2,11 @@ package com.springboot.milezero.service;
 
 import com.springboot.milezero.dto.request.BranchReqDto;
 import com.springboot.milezero.dto.response.BranchRespDto;
-import com.springboot.milezero.mapper.request.BranchReqMapper;
+import com.springboot.milezero.mapper.BranchMapper;
 import com.springboot.milezero.model.Branch;
 import com.springboot.milezero.repository.BranchRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import com.springboot.milezero.mapper.response.BranchRespMapper;
 
 import java.util.List;
 
@@ -18,14 +17,14 @@ public class BranchService {
     private final BranchRepository branchRepository;
 
     public void add(BranchReqDto branchReqDto) {
-        Branch branch = BranchReqMapper.convertDtoToEntity(branchReqDto);
+        Branch branch = BranchMapper.convertDtoToEntity(branchReqDto);
         branchRepository.save(branch);
     }
 
     public List<BranchRespDto> getAll() {
         List<Branch> list = branchRepository.findAll();
         return list.stream()
-                .map(BranchRespMapper::convertEntityToDto)
+                .map(BranchMapper::convertEntityToDto)
                 .toList();
     }
 }

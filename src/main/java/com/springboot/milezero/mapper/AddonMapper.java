@@ -1,9 +1,13 @@
-package com.springboot.milezero.mapper.request;
+package com.springboot.milezero.mapper;
 
 import com.springboot.milezero.dto.request.AddonReqDto;
 import com.springboot.milezero.model.Addon;
 
-public class AddonReqMapper {
+public class AddonMapper {
+
+    private AddonMapper() {
+        /* This utility class should not be instantiated */
+    }
 
     public static Addon convertDtoToEntity(AddonReqDto dto){
         Addon addon = new Addon();

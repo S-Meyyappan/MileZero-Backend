@@ -2,7 +2,7 @@ package com.springboot.milezero.service;
 
 import com.springboot.milezero.dto.request.VehicleReqDto;
 import com.springboot.milezero.exception.ResourceNotFoundException;
-import com.springboot.milezero.mapper.request.VehicleReqMapper;
+import com.springboot.milezero.mapper.VehicleMapper;
 import com.springboot.milezero.model.Branch;
 import com.springboot.milezero.model.Category;
 import com.springboot.milezero.model.Vehicle;
@@ -27,7 +27,7 @@ public class VehicleService {
         Branch branch = branchRepository.findById(vehicleReqDto.branchId())
                 .orElseThrow(() -> new ResourceNotFoundException("Branch not found"));
 
-        Vehicle vehicle = VehicleReqMapper.convertDtoToEntity(vehicleReqDto);
+        Vehicle vehicle = VehicleMapper.convertDtoToEntity(vehicleReqDto);
 
         vehicle.setCategory(category);
         vehicle.setBranch(branch);

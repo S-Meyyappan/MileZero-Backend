@@ -1,9 +1,13 @@
-package com.springboot.milezero.mapper.request;
+package com.springboot.milezero.mapper;
 
 import com.springboot.milezero.dto.request.BookingReqDto;
 import com.springboot.milezero.model.Booking;
 
-public class BookingReqMapper {
+public class BookingMapper {
+
+    private BookingMapper() {
+        /* This utility class should not be instantiated */
+    }
 
     public static Booking convertDtoToEntity(BookingReqDto dto) {
         Booking booking = new Booking();
