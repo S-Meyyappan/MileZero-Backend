@@ -4,14 +4,16 @@ import jakarta.validation.constraints.*;
 
 import java.math.BigDecimal;
 
-public record CategoryreqDto(
+public record CategoryReqDto(
         @NotBlank(message = "Field cannot be empty")
         String name,
         @NotNull(message = "Field cannot be empty")
         BigDecimal basePricePerDay,
         @NotNull(message = "Field cannot be empty")
-        BigDecimal lateFeePerHour,
+        BigDecimal basePricePerHour,
         @NotNull(message = "Field cannot be empty")
-        BigDecimal extraFeePerKm
+        BigDecimal basePricePerKm,
+        @Positive(message = "Field cannot be empty")
+        int includedKmPerDay
 ) {
 }

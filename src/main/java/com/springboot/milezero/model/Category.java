@@ -18,15 +18,18 @@ public class Category {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String name;
 
     @Column(nullable = false)
     private BigDecimal basePricePerDay;
 
     @Column(nullable = false)
-    private BigDecimal lateFeePerHour;
+    private BigDecimal basePricePerHour;
 
     @Column(nullable = false)
-    private BigDecimal extraFeePerKm;
+    private BigDecimal basePricePerKm;
+
+    @Column(nullable = false)
+    private int includedKmPerDay;
 }

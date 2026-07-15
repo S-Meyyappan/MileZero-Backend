@@ -1,6 +1,6 @@
 package com.springboot.milezero.controller;
 
-import com.springboot.milezero.dto.request.CategoryreqDto;
+import com.springboot.milezero.dto.request.CategoryReqDto;
 import com.springboot.milezero.service.CategoryService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +17,7 @@ public class CategoryController {
     private final CategoryService categoryService;
 
     @PostMapping("/add")
-    public void add(@Valid @RequestBody CategoryreqDto categoryreqDto){
+    public void add(@Valid @RequestBody CategoryReqDto categoryreqDto){
         categoryService.add(categoryreqDto);
     }
 }
