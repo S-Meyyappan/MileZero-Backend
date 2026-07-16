@@ -7,7 +7,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
-import java.time.Duration;
 import java.util.List;
 
 @Component
@@ -16,26 +15,28 @@ public class BookingPricingUtil {
 
     private final AddonService addonService;
 
-    public BigDecimal calculateBasePriceForHourly(Category category, int totalKm, Duration duration) {
-        BigDecimal hours = new BigDecimal(duration.toHours());
+    public BigDecimal calculateBasePriceForHourly(Category category, int requestedKm, BigDecimal hours) {
         BigDecimal hoursFee = category.getBasePricePerHour().multiply(hours);
-        BigDecimal kmFee = category.getBasePricePerKm().multiply(new BigDecimal(totalKm));
+        BigDecimal kmFee = calculateKmPrice(category, requestedKm);
         return hoursFee.add(kmFee);
     }
 
-    public BigDecimal calculateBasePriceForDaily(Category category, int totalKm, Duration duration) {
-        BigDecimal days = new BigDecimal(duration.toDays());
+    public BigDecimal calculateBasePriceForDaily(Category category, int requestedKm, BigDecimal days) {
         BigDecimal daysFee = category.getBasePricePerDay().multiply(days);
-        BigDecimal kmFee = category.getBasePricePerKm().multiply(new BigDecimal(totalKm));
+        BigDecimal kmFee = calculateKmPrice(category, requestedKm);
         return daysFee.add(kmFee);
     }
 
-    public BigDecimal calculateAddonPrice(List<BookingAddonDto> list, long days) {
+    public BigDecimal calculateAddonPrice(List<BookingAddonDto> list, BigDecimal days) {
         return list.stream()
                 .map(dto -> {
                 BigDecimal price = addonService.get(dto.addonId()).getPricePerDay();
                 BigDecimal addonPriceOfQty = price.multiply(new BigDecimal(dto.quantity()));
-                return addonPriceOfQty.multiply(new BigDecimal(days));
+                return addonPriceOfQty.multiply(days);
         }).reduce(BigDecimal.ZERO, BigDecimal::add);
+    }
+
+    public BigDecimal calculateKmPrice(Category category, int requestedKm) {
+        return category.getBasePricePerKm().multiply(new BigDecimal(requestedKm));
     }
 }

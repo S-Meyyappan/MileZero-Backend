@@ -11,12 +11,14 @@ import com.springboot.milezero.mapper.BookingMapper;
 import com.springboot.milezero.model.*;
 import com.springboot.milezero.repository.*;
 import com.springboot.milezero.utility.BookingPricingUtil;
+import com.springboot.milezero.utility.DurationCalcUtil;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.Duration;
 import java.util.List;
 
@@ -101,27 +103,30 @@ public class BookingService {
                         addonRepository.findById(bookingAddonDto.addonId())
                         .orElseThrow(() -> new ResourceNotFoundException("Addon not found for id : "+bookingAddonDto.addonId())));
 
-        // Calculate duration between both days with milliseconds difference
+        // Calculate duration between both days as days and hours
         Duration duration = Duration.between(bookingReqDto.plannedPickup(), bookingReqDto.plannedReturn());
+        BigDecimal days = DurationCalcUtil.getDurationOfDays(duration);
+        BigDecimal hours = DurationCalcUtil.getDurationOfHours(duration);
 
         // Calculate totalKm
-        int totalKm = bookingReqDto.requestedKm()+category.getIncludedKmPerDay();
+        int requestedKm = bookingReqDto.requestedKm();
+        int totalKm = requestedKm + category.getIncludedKmPerDay();
 
         // Calculate base price
         BigDecimal basePrice = bookingReqDto.bookingType().equals(BookingType.HOURLY)
-                ? bookingPricingUtil.calculateBasePriceForHourly(category, totalKm, duration)
-                : bookingPricingUtil.calculateBasePriceForDaily(category, totalKm, duration);
+                ? bookingPricingUtil.calculateBasePriceForHourly(category, requestedKm, hours)
+                : bookingPricingUtil.calculateBasePriceForDaily(category, requestedKm, days);
 
         // Calculate addon price
-        BigDecimal addonPrice = bookingPricingUtil.calculateAddonPrice(list, duration.toDays());
+        BigDecimal addonPrice = bookingPricingUtil.calculateAddonPrice(list, days);
 
         // Calculate estimated price
         BigDecimal estimatedPrice = basePrice.add(addonPrice);
 
         return new BookingQuoteRespDto(
-                basePrice,
-                addonPrice,
-                estimatedPrice,
+                basePrice.setScale(2, RoundingMode.HALF_UP),
+                addonPrice.setScale(2, RoundingMode.HALF_UP),
+                estimatedPrice.setScale(2, RoundingMode.HALF_UP),
                 totalKm
         );
     }

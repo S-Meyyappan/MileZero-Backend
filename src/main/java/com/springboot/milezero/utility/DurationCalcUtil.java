@@ -1,0 +1,22 @@
+package com.springboot.milezero.utility;
+
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.time.Duration;
+
+public class DurationCalcUtil {
+
+    public static BigDecimal getDurationOfDays(Duration duration) {
+        BigDecimal days = BigDecimal.valueOf(duration.toDaysPart());
+        BigDecimal hours = getDurationOfHours(duration);
+        BigDecimal fractionalDays = hours.divide(new BigDecimal(24), 2, RoundingMode.HALF_UP);
+        return days.add(fractionalDays);
+    }
+
+    public static BigDecimal getDurationOfHours(Duration duration) {
+        BigDecimal hours = BigDecimal.valueOf(duration.toHoursPart());
+        BigDecimal minutes = BigDecimal.valueOf(duration.toMinutesPart());
+        BigDecimal fractionalHours = minutes.divide(new BigDecimal(60), 2, RoundingMode.HALF_UP);
+        return hours.add(fractionalHours);
+    }
+}
