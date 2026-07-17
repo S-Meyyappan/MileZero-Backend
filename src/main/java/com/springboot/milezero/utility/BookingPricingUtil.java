@@ -30,7 +30,7 @@ public class BookingPricingUtil {
     public BigDecimal calculateAddonPrice(List<BookingAddonDto> list, BigDecimal days) {
         return list.stream()
                 .map(dto -> {
-                BigDecimal price = addonService.get(dto.addonId()).getPricePerDay();
+                BigDecimal price = addonService.get(dto.addonId()).pricePerDay();
                 BigDecimal addonPriceOfQty = price.multiply(new BigDecimal(dto.quantity()));
                 return addonPriceOfQty.multiply(days);
         }).reduce(BigDecimal.ZERO, BigDecimal::add);

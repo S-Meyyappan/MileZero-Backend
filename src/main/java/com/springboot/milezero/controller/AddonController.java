@@ -1,13 +1,13 @@
 package com.springboot.milezero.controller;
 
 import com.springboot.milezero.dto.request.AddonReqDto;
+import com.springboot.milezero.dto.response.AddonRespDto;
 import com.springboot.milezero.service.AddonService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -19,5 +19,21 @@ public class AddonController {
     @PostMapping("/add")
     public void add(@Valid @RequestBody AddonReqDto addonReqDto) {
         addonService.add(addonReqDto);
+    }
+
+    @GetMapping("/get/{id}")
+    public AddonRespDto get(@PathVariable long id){
+        return addonService.get(id);
+    }
+
+    @GetMapping("/get-all")
+    public List<AddonRespDto> getAll(){
+        return addonService.getAll();
+    }
+
+    @PutMapping("/update/{id}")
+    public void update( @PathVariable long id,
+                        @Valid @RequestBody AddonReqDto addonReqDto) {
+        addonService.update(addonReqDto,id);
     }
 }
