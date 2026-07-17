@@ -2,10 +2,13 @@ package com.springboot.milezero.controller;
 
 import com.springboot.milezero.dto.request.BookingReqDto;
 import com.springboot.milezero.dto.response.BookingQuoteRespDto;
+import com.springboot.milezero.dto.response.BookingRespDto;
 import com.springboot.milezero.service.BookingService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -22,5 +25,20 @@ public class BookingController {
     @PostMapping("/add")
     public void add(@Valid @RequestBody BookingReqDto bookingReqDto) {
         bookingService.add(bookingReqDto);
+    }
+
+    @GetMapping("/get/{id}")
+    public BookingRespDto get(@PathVariable long id){
+        return bookingService.get(id);
+    }
+
+    @GetMapping("/get-by-branch/{id}")
+    public List<BookingRespDto> getByBranch(@PathVariable long id){
+        return bookingService.getByBranch(id);
+    }
+
+    @GetMapping("/get-by-vehicle/{id}")
+    public List<BookingRespDto> getByVehicle(@PathVariable long id){
+        return bookingService.getByVehicle(id);
     }
 }

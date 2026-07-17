@@ -1,6 +1,7 @@
 package com.springboot.milezero.mapper;
 
 import com.springboot.milezero.dto.request.BookingAddonDto;
+import com.springboot.milezero.dto.response.BookingAddonRespDto;
 import com.springboot.milezero.dto.util.AddonDtoUtil;
 import com.springboot.milezero.model.Booking;
 import com.springboot.milezero.model.BookingAddon;
@@ -23,5 +24,13 @@ public class BookingAddonMapper {
         bookingAddon.setQuantity(dto.quantity());
         bookingAddon.setBooking(booking);
         return bookingAddon;
+    }
+
+    public static BookingAddonRespDto convertEntityToDto(BookingAddon bookingAddon){
+        return new BookingAddonRespDto(
+                bookingAddon.getAddon().getName(),
+                bookingAddon.getAddon().getPricePerDay(),
+                bookingAddon.getQuantity()
+        );
     }
 }

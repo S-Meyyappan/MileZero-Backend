@@ -3,6 +3,7 @@ package com.springboot.milezero.service;
 import com.springboot.milezero.dto.request.BookingAddonDto;
 import com.springboot.milezero.dto.request.BookingReqDto;
 import com.springboot.milezero.dto.response.BookingQuoteRespDto;
+import com.springboot.milezero.dto.response.BookingRespDto;
 import com.springboot.milezero.dto.util.AddonDtoUtil;
 import com.springboot.milezero.enums.BookingType;
 import com.springboot.milezero.exception.ResourceNotFoundException;
@@ -129,5 +130,30 @@ public class BookingService {
                 estimatedPrice.setScale(2, RoundingMode.HALF_UP),
                 totalKm
         );
+    }
+
+    public BookingRespDto get(long id) {
+        Booking booking = bookingRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Booking Id Invalid"));
+
+        return BookingMapper.convertEntityToDto(booking);
+    }
+
+    public List<BookingRespDto> getByBranch(long id) {
+        List<Booking> list = bookingRepository.findByBranchId(id);
+
+        return list
+                .stream()
+                .map(BookingMapper::convertEntityToDto)
+                .toList();
+    }
+
+    public List<BookingRespDto> getByVehicle(long id) {
+        List<Booking> list = bookingRepository.findByVehicleId(id);
+
+        return list
+                .stream()
+                .map(BookingMapper::convertEntityToDto)
+                .toList();
     }
 }

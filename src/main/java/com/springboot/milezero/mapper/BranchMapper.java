@@ -21,7 +21,6 @@ public class BranchMapper {
 
     public static BranchRespDto convertEntityToDto(Branch branch){
         return new BranchRespDto(
-                branch.getId(),
                 branch.getName(),
                 branch.getCity(),
                 branch.getAddress(),

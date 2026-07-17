@@ -10,6 +10,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 import java.math.BigDecimal;
 import java.time.Instant;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "booking")
@@ -67,6 +68,9 @@ public class Booking {
     @ManyToOne
     @JoinColumn(name = "vehicle_id", nullable = true) // Added during pickup
     private Vehicle vehicle;
+
+    @OneToMany(fetch = FetchType.LAZY)
+    private List<BookingAddon> bookingAddons;
 
     @CreationTimestamp
     private Instant createdAt;
