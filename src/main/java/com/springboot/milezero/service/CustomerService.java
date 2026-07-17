@@ -1,7 +1,9 @@
 package com.springboot.milezero.service;
 
 import com.springboot.milezero.dto.request.CustomerReqDto;
+import com.springboot.milezero.dto.response.CustomerRespDto;
 import com.springboot.milezero.enums.Role;
+import com.springboot.milezero.exception.ResourceNotFoundException;
 import com.springboot.milezero.mapper.CustomerMapper;
 import com.springboot.milezero.mapper.UserMapper;
 import com.springboot.milezero.model.Customer;
@@ -10,6 +12,8 @@ import com.springboot.milezero.repository.CustomerRepository;
 import com.springboot.milezero.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -34,4 +38,35 @@ public class CustomerService {
         // 4. Save Customer
         customerRepository.save(customer);
     }
+
+    public CustomerRespDto get(long id) {
+        Customer customer = customerRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Customer Id Invalid"));
+
+        return CustomerMapper.convertEntityToDto(customer);
+    }
+
+    public List<CustomerRespDto> getAll() {
+        List<Customer> list = customerRepository.findAll();
+
+        return list
+                .stream()
+                .map(CustomerMapper::convertEntityToDto)
+                .toList();
+    }
+
+    /*
+    public void update(@Valid CustomerReqDto dto, long id) {
+        Customer customer = customerRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Customer Id Invalid"));
+
+        customer.setName(dto.name());
+        customer.setPhone(dto.phone());
+        customer.setLicenseNo(dto.licenseNo());
+        customer.setLicenseExpiryDate(dto.licenseExpiryDate());
+        customer.setInsurancePolicyNo(dto.insurancePolicyNo());
+
+        customerRepository.save(customer);
+    }
+     */
 }

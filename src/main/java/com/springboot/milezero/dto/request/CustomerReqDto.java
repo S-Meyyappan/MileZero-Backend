@@ -1,6 +1,5 @@
 package com.springboot.milezero.dto.request;
 
-import com.springboot.milezero.enums.Role;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
@@ -20,6 +19,8 @@ public record CustomerReqDto(
 
         @NotNull(message = "Field cannot be null")
         LocalDate licenseExpiryDate,
+
+        String insurancePolicyNo,
 
         @Pattern(regexp = "^[A-Za-z0-9]+@[A-Za-z]+\\.[A-Za-z]+$", message = "Provide valid email address")
         String email,
