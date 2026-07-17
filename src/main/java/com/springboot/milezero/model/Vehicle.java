@@ -6,7 +6,10 @@ import com.springboot.milezero.enums.FuelType;
 import com.springboot.milezero.enums.Transmission;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
+import java.time.Instant;
 import java.time.LocalDate;
 
 @Entity
@@ -66,5 +69,11 @@ public class Vehicle {
     @ManyToOne
     @JoinColumn(name = "current_branch_id", nullable = false)
     private Branch branch;
+
+    @CreationTimestamp
+    private Instant createdAt;
+
+    @UpdateTimestamp
+    private Instant updatedAt;
 
 }

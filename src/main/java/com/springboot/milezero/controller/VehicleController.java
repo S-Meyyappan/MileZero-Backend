@@ -1,13 +1,13 @@
 package com.springboot.milezero.controller;
 
 import com.springboot.milezero.dto.request.VehicleReqDto;
+import com.springboot.milezero.dto.response.VehicleRespDto;
 import com.springboot.milezero.service.VehicleService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/vehicle")
@@ -19,5 +19,26 @@ public class VehicleController {
     @PostMapping("/add")
     public void add(@Valid @RequestBody VehicleReqDto vehicleReqDto) {
         vehicleService.add(vehicleReqDto);
+    }
+
+    @GetMapping("/get/{id}")
+    public VehicleRespDto get(@PathVariable long id){
+        return vehicleService.get(id);
+    }
+
+    @GetMapping("/get-by-category/{id}")
+    public VehicleRespDto getByCategory(@PathVariable long id){
+        return vehicleService.getByCategory(id);
+    }
+
+    @GetMapping("/get-all")
+    public List<VehicleRespDto> getALl(){
+        return vehicleService.getAll();
+    }
+
+    @PutMapping("/update/{id}")
+    public void update( @PathVariable long id,
+                        @Valid @RequestBody VehicleReqDto vehicleReqDto){
+        vehicleService.update(vehicleReqDto, id);
     }
 }
