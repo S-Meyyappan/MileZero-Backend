@@ -1,13 +1,13 @@
 package com.springboot.milezero.controller;
 
 import com.springboot.milezero.dto.request.CategoryReqDto;
+import com.springboot.milezero.dto.response.CategoryRespDto;
 import com.springboot.milezero.service.CategoryService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -19,5 +19,21 @@ public class CategoryController {
     @PostMapping("/add")
     public void add(@Valid @RequestBody CategoryReqDto categoryreqDto){
         categoryService.add(categoryreqDto);
+    }
+
+    @GetMapping("/get/{id}")
+    public CategoryRespDto get(@PathVariable long id){
+        return categoryService.get(id);
+    }
+
+    @GetMapping("/get-all")
+    public List<CategoryRespDto> getALl(){
+        return categoryService.getAll();
+    }
+
+    @PutMapping("/update/{id}")
+    public void update( @PathVariable long id,
+                        @Valid @RequestBody CategoryReqDto categoryreqDto){
+        categoryService.update(categoryreqDto, id);
     }
 }

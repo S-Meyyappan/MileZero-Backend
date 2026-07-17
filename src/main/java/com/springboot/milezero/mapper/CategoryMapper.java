@@ -1,6 +1,7 @@
 package com.springboot.milezero.mapper;
 
 import com.springboot.milezero.dto.request.CategoryReqDto;
+import com.springboot.milezero.dto.response.CategoryRespDto;
 import com.springboot.milezero.model.Category;
 
 public class CategoryMapper {
@@ -17,5 +18,15 @@ public class CategoryMapper {
         category.setBasePricePerHour(dto.basePricePerHour());
         category.setIncludedKmPerDay(dto.includedKmPerDay());
         return category;
+    }
+
+    public static CategoryRespDto convertEntityToDto(Category category){
+        return new CategoryRespDto(
+                category.getName(),
+                category.getBasePricePerDay(),
+                category.getBasePricePerHour(),
+                category.getBasePricePerKm(),
+                category.getIncludedKmPerDay()
+        );
     }
 }
