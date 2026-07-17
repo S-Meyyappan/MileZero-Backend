@@ -34,12 +34,6 @@ public class Returnlog {
     private FuelLevel fuelLevel;
 
     @Column(nullable = false)
-    private int lateHours;
-
-    @Column(nullable = false)
-    private int extraKm;
-
-    @Column(nullable = false)
     private BigDecimal extraCharges;
 
     @Column(nullable = false, length = 1200)
