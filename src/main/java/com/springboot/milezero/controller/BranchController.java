@@ -24,8 +24,8 @@ public class BranchController {
     }
      */
     @PostMapping("/add")
-    public void add(@Valid @RequestBody BranchReqDto branchReqDto){
-        branchService.add(branchReqDto);
+    public BranchRespDto add(@Valid @RequestBody BranchReqDto branchReqDto){
+        return branchService.add(branchReqDto);
     }
 
     @GetMapping("/get-all")

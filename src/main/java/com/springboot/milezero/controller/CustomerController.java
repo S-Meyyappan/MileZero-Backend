@@ -29,8 +29,8 @@ public class CustomerController {
     }
     */
     @PostMapping("/add")
-    public void add(@Valid @RequestBody CustomerReqDto customerReqDto){
-        customerService.add(customerReqDto);
+    public CustomerRespDto add(@Valid @RequestBody CustomerReqDto customerReqDto){
+        return customerService.add(customerReqDto);
     }
 
     @GetMapping("/get/{id}")

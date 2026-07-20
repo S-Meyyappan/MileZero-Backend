@@ -24,7 +24,7 @@ public class VehicleService {
     private final CategoryRepository categoryRepository;
     private final BranchRepository branchRepository;
 
-    public void add(VehicleReqDto vehicleReqDto) {
+    public VehicleRespDto add(VehicleReqDto vehicleReqDto) {
         Category category = categoryRepository.findById(vehicleReqDto.categoryId())
                 .orElseThrow(() -> new ResourceNotFoundException("Category not found"));
 
@@ -36,7 +36,8 @@ public class VehicleService {
         vehicle.setCategory(category);
         vehicle.setBranch(branch);
 
-        vehicleRepository.save(vehicle);
+        vehicle = vehicleRepository.save(vehicle);
+        return VehicleMapper.convertEntityToDto(vehicle);
     }
 
     public VehicleRespDto get(long id) {
@@ -62,7 +63,7 @@ public class VehicleService {
                 .toList();
     }
 
-    public void update(@Valid VehicleReqDto dto, long id) {
+    public VehicleRespDto update(@Valid VehicleReqDto dto, long id) {
         Vehicle vehicle = vehicleRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Vehicle Id Invalid"));
 
@@ -78,6 +79,7 @@ public class VehicleService {
         vehicle.setPurchaseDate(dto.purchaseDate());
         vehicle.setWithAc(dto.withAc());
 
-        vehicleRepository.save(vehicle);
+        vehicle = vehicleRepository.save(vehicle);
+        return VehicleMapper.convertEntityToDto(vehicle);
     }
 }

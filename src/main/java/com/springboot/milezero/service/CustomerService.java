@@ -22,7 +22,7 @@ public class CustomerService {
     private final CustomerRepository customerRepository;
     private final UserRepository userRepository;
 
-    public void add(CustomerReqDto customerReqDto) {
+    public CustomerRespDto add(CustomerReqDto customerReqDto) {
         // 1. Get user from mapper
         User user = UserMapper.convertDtoToEntity(customerReqDto.email(),
                                                     customerReqDto.password(),
@@ -36,7 +36,8 @@ public class CustomerService {
         customer.setUser(user);
 
         // 4. Save Customer
-        customerRepository.save(customer);
+        customer = customerRepository.save(customer);
+        return CustomerMapper.convertEntityToDto(customer);
     }
 
     public CustomerRespDto get(long id) {

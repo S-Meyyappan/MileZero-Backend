@@ -23,8 +23,8 @@ public class BookingController {
     }
 
     @PostMapping("/add")
-    public void add(@Valid @RequestBody BookingReqDto bookingReqDto) {
-        bookingService.add(bookingReqDto);
+    public BookingRespDto add(@Valid @RequestBody BookingReqDto bookingReqDto) {
+        return bookingService.add(bookingReqDto);
     }
 
     @GetMapping("/get/{id}")

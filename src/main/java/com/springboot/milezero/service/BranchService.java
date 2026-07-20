@@ -16,9 +16,10 @@ public class BranchService {
 
     private final BranchRepository branchRepository;
 
-    public void add(BranchReqDto branchReqDto) {
+    public BranchRespDto add(BranchReqDto branchReqDto) {
         Branch branch = BranchMapper.convertDtoToEntity(branchReqDto);
-        branchRepository.save(branch);
+        branch = branchRepository.save(branch);
+        return BranchMapper.convertEntityToDto(branch);
     }
 
     public List<BranchRespDto> getAll() {

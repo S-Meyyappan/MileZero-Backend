@@ -17,8 +17,8 @@ public class AddonController {
     private final AddonService addonService;
 
     @PostMapping("/add")
-    public void add(@Valid @RequestBody AddonReqDto addonReqDto) {
-        addonService.add(addonReqDto);
+    public AddonRespDto add(@Valid @RequestBody AddonReqDto addonReqDto) {
+        return addonService.add(addonReqDto);
     }
 
     @GetMapping("/get/{id}")
@@ -32,8 +32,8 @@ public class AddonController {
     }
 
     @PutMapping("/update/{id}")
-    public void update( @PathVariable long id,
+    public AddonRespDto update( @PathVariable long id,
                         @Valid @RequestBody AddonReqDto addonReqDto) {
-        addonService.update(addonReqDto,id);
+        return addonService.update(addonReqDto,id);
     }
 }

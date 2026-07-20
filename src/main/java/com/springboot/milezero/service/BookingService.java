@@ -37,7 +37,7 @@ public class BookingService {
     private final BookingPricingUtil bookingPricingUtil;
 
     @Transactional
-    public void add(@Valid BookingReqDto bookingReqDto) {
+    public BookingRespDto add(@Valid BookingReqDto bookingReqDto) {
         // Validate all ids(pickup branch, return branch, customer, category) present in dto
         Branch pickupBranch = branchRepository.findById(bookingReqDto.pickupBranchId())
                 .orElseThrow(() -> new ResourceNotFoundException("Pickup branch not found"));
@@ -90,6 +90,7 @@ public class BookingService {
 
         // Batch save all bookingAddons to db
         bookingAddonRepository.saveAll(bookingAddons);
+        return BookingMapper.convertEntityToDto(savedBooking);
     }
 
     public BookingQuoteRespDto getQuote(@Valid BookingReqDto bookingReqDto) {

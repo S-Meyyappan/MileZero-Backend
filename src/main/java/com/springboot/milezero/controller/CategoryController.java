@@ -17,8 +17,8 @@ public class CategoryController {
     private final CategoryService categoryService;
 
     @PostMapping("/add")
-    public void add(@Valid @RequestBody CategoryReqDto categoryreqDto){
-        categoryService.add(categoryreqDto);
+    public CategoryRespDto add(@Valid @RequestBody CategoryReqDto categoryreqDto){
+        return categoryService.add(categoryreqDto);
     }
 
     @GetMapping("/get/{id}")
@@ -32,8 +32,8 @@ public class CategoryController {
     }
 
     @PutMapping("/update/{id}")
-    public void update( @PathVariable long id,
+    public CategoryRespDto update( @PathVariable long id,
                         @Valid @RequestBody CategoryReqDto categoryreqDto){
-        categoryService.update(categoryreqDto, id);
+        return categoryService.update(categoryreqDto, id);
     }
 }

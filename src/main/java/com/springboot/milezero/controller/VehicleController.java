@@ -17,8 +17,8 @@ public class VehicleController {
     private final VehicleService vehicleService;
 
     @PostMapping("/add")
-    public void add(@Valid @RequestBody VehicleReqDto vehicleReqDto) {
-        vehicleService.add(vehicleReqDto);
+    public VehicleRespDto add(@Valid @RequestBody VehicleReqDto vehicleReqDto) {
+        return vehicleService.add(vehicleReqDto);
     }
 
     @GetMapping("/get/{id}")
@@ -37,8 +37,8 @@ public class VehicleController {
     }
 
     @PutMapping("/update/{id}")
-    public void update( @PathVariable long id,
+    public VehicleRespDto update( @PathVariable long id,
                         @Valid @RequestBody VehicleReqDto vehicleReqDto){
-        vehicleService.update(vehicleReqDto, id);
+        return vehicleService.update(vehicleReqDto, id);
     }
 }

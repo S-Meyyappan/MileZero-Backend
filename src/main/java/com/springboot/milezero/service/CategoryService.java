@@ -18,9 +18,10 @@ public class CategoryService {
 
     private final CategoryRepository categoryRepository;
 
-    public void add(CategoryReqDto categoryreqDto) {
+    public CategoryRespDto add(CategoryReqDto categoryreqDto) {
         Category category = CategoryMapper.convertDtoToEntity(categoryreqDto);
-        categoryRepository.save(category);
+        category = categoryRepository.save(category);
+        return CategoryMapper.convertEntityToDto(category);
     }
 
     public CategoryRespDto get(long id) {
@@ -30,7 +31,7 @@ public class CategoryService {
         return CategoryMapper.convertEntityToDto(category);
     }
 
-    public void update(@Valid CategoryReqDto dto, long id) {
+    public CategoryRespDto update(@Valid CategoryReqDto dto, long id) {
         Category category = categoryRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Category Id Invalid"));
 
@@ -40,7 +41,8 @@ public class CategoryService {
         category.setBasePricePerKm(dto.basePricePerKm());
         category.setIncludedKmPerDay(dto.includedKmPerDay());
 
-        categoryRepository.save(category);
+        category = categoryRepository.save(category);
+        return CategoryMapper.convertEntityToDto(category);
     }
 
     public List<CategoryRespDto> getAll() {

@@ -18,9 +18,10 @@ public class AddonService {
 
     private final AddonRepository addonRepository;
 
-    public void add(AddonReqDto addonReqDto) {
+    public AddonRespDto add(AddonReqDto addonReqDto) {
         Addon addon = AddonMapper.convertDtoToEntity(addonReqDto);
-        addonRepository.save(addon);
+        addon = addonRepository.save(addon);
+        return AddonMapper.convertEntityTODto(addon);
     }
 
     public AddonRespDto get(Long id) {
@@ -39,13 +40,14 @@ public class AddonService {
                 .toList();
     }
 
-    public void update(@Valid AddonReqDto dto, long id) {
+    public AddonRespDto update(@Valid AddonReqDto dto, long id) {
         Addon addon = addonRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Addon not found"));
 
         addon.setName(dto.name());
         addon.setPricePerDay(dto.pricePerDay());
 
-        addonRepository.save(addon);
+        addon = addonRepository.save(addon);
+        return AddonMapper.convertEntityTODto(addon);
     }
 }
