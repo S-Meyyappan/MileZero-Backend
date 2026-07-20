@@ -1,14 +1,13 @@
 package com.springboot.milezero.service;
 
 import com.springboot.milezero.dto.request.ReturnlogReqDto;
+import com.springboot.milezero.dto.response.ReturnlogRespDto;
 import com.springboot.milezero.enums.BookingStatus;
 import com.springboot.milezero.enums.CurrentStatus;
 import com.springboot.milezero.exception.ResourceNotFoundException;
+import com.springboot.milezero.mapper.PickuplogMapper;
 import com.springboot.milezero.mapper.ReturnlogMapper;
-import com.springboot.milezero.model.Booking;
-import com.springboot.milezero.model.Employee;
-import com.springboot.milezero.model.Returnlog;
-import com.springboot.milezero.model.Vehicle;
+import com.springboot.milezero.model.*;
 import com.springboot.milezero.repository.BookingRepository;
 import com.springboot.milezero.repository.EmployeeRepository;
 import com.springboot.milezero.repository.ReturnlogRepository;
@@ -32,7 +31,7 @@ public class ReturnlogService {
     private final VehicleRepository vehicleRepository;
 
     @Transactional
-    public void add(@Valid ReturnlogReqDto returnlogReqDto) {
+    public ReturnlogRespDto add(@Valid ReturnlogReqDto returnlogReqDto) {
         // Validate if they exist
         Booking booking = bookingRepository.findById(returnlogReqDto.bookingId())
                 .orElseThrow(() -> new ResourceNotFoundException("Booking Id Invalid"));
@@ -63,7 +62,9 @@ public class ReturnlogService {
         // Save Vehicle, Booking and Returnlog
         vehicleRepository.save(vehicle);
         bookingRepository.save(booking);
-        returnlogRepository.save(returnlog);
+        returnlog = returnlogRepository.save(returnlog);
+
+        return ReturnlogMapper.convertEntityToDto(returnlog);
     }
 
     public BigDecimal calc(ReturnlogReqDto returnlogReqDto){
@@ -73,5 +74,12 @@ public class ReturnlogService {
 
         // Calc extra charges
         return returnPricingUtil.calculateExtraCharges(returnlogReqDto, booking);
+    }
+
+    public ReturnlogRespDto getByBookingId(long id) {
+        Returnlog returnlog = returnlogRepository.findByBookingId(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Booking Id Invalid"));
+
+        return ReturnlogMapper.convertEntityToDto(returnlog);
     }
 }
