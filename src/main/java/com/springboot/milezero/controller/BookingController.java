@@ -41,4 +41,10 @@ public class BookingController {
     public List<BookingRespDto> getByVehicle(@PathVariable long id){
         return bookingService.getByVehicle(id);
     }
+
+    @GetMapping("/get-by-customer")
+    public List<BookingRespDto> getByCustomer(@RequestParam String customerName){
+        return bookingService.getByCustomer(customerName);
+    }
+
 }

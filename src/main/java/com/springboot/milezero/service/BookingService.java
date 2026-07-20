@@ -157,4 +157,13 @@ public class BookingService {
                 .map(BookingMapper::convertEntityToDto)
                 .toList();
     }
+
+    public List<BookingRespDto> getByCustomer(String customerName) {
+        List<Booking> list = bookingRepository.findByCustomerName(customerName);
+
+        return list
+                .stream()
+                .map(BookingMapper::convertEntityToDto)
+                .toList();
+    }
 }
