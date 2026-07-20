@@ -1,6 +1,7 @@
 package com.springboot.milezero.service;
 
 import com.springboot.milezero.dto.request.PickuplogReqDto;
+import com.springboot.milezero.dto.response.PickuplogRespDto;
 import com.springboot.milezero.enums.BookingStatus;
 import com.springboot.milezero.enums.CurrentStatus;
 import com.springboot.milezero.exception.ResourceNotFoundException;
@@ -28,7 +29,7 @@ public class PickuplogService {
     private final VehicleRepository vehicleRepository;
 
     @Transactional
-    public void add(@Valid PickuplogReqDto pickuplogReqDto) {
+    public PickuplogRespDto add(@Valid PickuplogReqDto pickuplogReqDto) {
         // Step 1. Validate id (vehicle, booking, employee) if exist
         Booking booking = bookingRepository.findById(pickuplogReqDto.bookingId())
             .orElseThrow(() -> new ResourceNotFoundException("Booking Id Invalid"));
@@ -52,6 +53,14 @@ public class PickuplogService {
         pickuplog.setEmployee(employee);
 
         // Step 5. Save the pickuplog
-        pickuplogRepository.save(pickuplog);
+        pickuplog = pickuplogRepository.save(pickuplog);
+        return PickuplogMapper.convertEntityToDto(pickuplog);
+    }
+
+    public PickuplogRespDto getByBookingId(long id) {
+        Pickuplog pickuplog = pickuplogRepository.findByBookingId(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Booking Id Invalid"));
+
+        return PickuplogMapper.convertEntityToDto(pickuplog);
     }
 }

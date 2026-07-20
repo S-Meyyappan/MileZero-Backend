@@ -1,13 +1,11 @@
 package com.springboot.milezero.controller;
 
 import com.springboot.milezero.dto.request.PickuplogReqDto;
+import com.springboot.milezero.dto.response.PickuplogRespDto;
 import com.springboot.milezero.service.PickuplogService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -17,7 +15,14 @@ public class PickuplogController {
     private final PickuplogService pickuplogService;
 
     @PostMapping("/add")
-    public void add(@Valid @RequestBody PickuplogReqDto pickuplogReqDto) {
-        pickuplogService.add(pickuplogReqDto);
+    public PickuplogRespDto add(@Valid @RequestBody PickuplogReqDto pickuplogReqDto) {
+        return pickuplogService.add(pickuplogReqDto);
     }
+
+    @GetMapping("/get-by/booking/{id}")
+    public PickuplogRespDto getByBookingId(@PathVariable long id){
+        return pickuplogService.getByBookingId(id);
+    }
+
+
 }
