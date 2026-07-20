@@ -18,4 +18,9 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
            SELECT e FROM Employee e WHERE e.user.isActive = true
            """)
     List<Employee> fetchAll();
+
+    @Query("""
+            SELECT e FROM Employee e WHERE e.branch.id = :branchId AND e.user.role = MANAGER
+            """)
+    Optional<Employee> hasManager(long branchId);
 }

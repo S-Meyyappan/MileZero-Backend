@@ -1,6 +1,7 @@
 package com.springboot.milezero.config;
 
 import com.springboot.milezero.dto.response.ErrorResponseDto;
+import com.springboot.milezero.exception.ResourceAlreadyExistsException;
 import com.springboot.milezero.exception.ResourceNotFoundException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -36,6 +37,15 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(ResourceNotFoundException.class)
     public ResponseEntity<ErrorResponseDto> handleResourceNotFoundException(ResourceNotFoundException e) {
+        return ResponseEntity
+                .badRequest()
+                .body(
+                        new ErrorResponseDto(e.getMessage())
+                );
+    }
+
+    @ExceptionHandler(ResourceAlreadyExistsException.class)
+    public ResponseEntity<ErrorResponseDto> handleResourceAlreadyExistsException(ResourceAlreadyExistsException e) {
         return ResponseEntity
                 .badRequest()
                 .body(

@@ -41,14 +41,14 @@ public class CustomerService {
     }
 
     public CustomerRespDto get(long id) {
-        Customer customer = customerRepository.findById(id)
+        Customer customer = customerRepository.fetchById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Customer Id Invalid"));
 
         return CustomerMapper.convertEntityToDto(customer);
     }
 
     public List<CustomerRespDto> getAll() {
-        List<Customer> list = customerRepository.findAll();
+        List<Customer> list = customerRepository.fetchAll();
 
         return list
                 .stream()

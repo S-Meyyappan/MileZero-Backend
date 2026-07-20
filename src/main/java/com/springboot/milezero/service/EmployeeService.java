@@ -1,6 +1,9 @@
 package com.springboot.milezero.service;
 
 import com.springboot.milezero.dto.request.EmployeeReqDto;
+import com.springboot.milezero.dto.response.EmployeeRespDto;
+import com.springboot.milezero.enums.Role;
+import com.springboot.milezero.exception.ResourceAlreadyExistsException;
 import com.springboot.milezero.exception.ResourceNotFoundException;
 import com.springboot.milezero.mapper.EmployeeMapper;
 import com.springboot.milezero.mapper.UserMapper;
@@ -14,6 +17,8 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class EmployeeService {
@@ -23,7 +28,7 @@ public class EmployeeService {
     private final BranchRepository branchRepository;
 
     @Transactional
-    public void add(EmployeeReqDto employeeReqDto) {
+    public EmployeeRespDto add(EmployeeReqDto employeeReqDto) {
         // 1. Validate branch id
         Branch branch = branchRepository.findById(employeeReqDto.branchId())
             .orElseThrow(() -> new ResourceNotFoundException("Branch Id Invalid"));
@@ -40,6 +45,39 @@ public class EmployeeService {
         employee.setBranch(branch);
 
         // 4. Add employee
-        employeeRepository.save(employee);
+        employee = employeeRepository.save(employee);
+        return EmployeeMapper.convertEntityToDto(employee);
+    }
+
+    public EmployeeRespDto get(long id) {
+        Employee employee = employeeRepository.fetchById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Employee Id Invalid"));
+        return EmployeeMapper.convertEntityToDto(employee);
+    }
+
+    public List<EmployeeRespDto> getAll() {
+        List<Employee> list = employeeRepository.fetchAll();
+        return list
+                .stream()
+                .map(EmployeeMapper::convertEntityToDto)
+                .toList();
+    }
+
+    public EmployeeRespDto updateManager(long id) {
+        Employee employee = employeeRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Employee Id Invalid"));
+
+        long branchId = employee.getBranch().getId();
+
+        // Check if there is a manager for the same branch
+        if(employeeRepository.hasManager(branchId).isPresent()){
+                throw new ResourceAlreadyExistsException("Manager Already Exists");
+        }
+
+        employee.getUser().setRole(Role.MANAGER);
+
+        employee = employeeRepository.save(employee);
+
+        return EmployeeMapper.convertEntityToDto(employee);
     }
 }

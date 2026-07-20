@@ -1,13 +1,13 @@
 package com.springboot.milezero.controller;
 
 import com.springboot.milezero.dto.request.EmployeeReqDto;
+import com.springboot.milezero.dto.response.EmployeeRespDto;
 import com.springboot.milezero.service.EmployeeService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -29,7 +29,22 @@ public class EmployeeController {
     }
     */
     @PostMapping("/add")
-    public void add(@Valid @RequestBody EmployeeReqDto employeeReqDto){
-        employeeService.add(employeeReqDto);
+    public EmployeeRespDto add(@Valid @RequestBody EmployeeReqDto employeeReqDto){
+        return employeeService.add(employeeReqDto);
+    }
+
+    @GetMapping("/get/{id}")
+    public EmployeeRespDto get(@PathVariable long id){
+        return employeeService.get(id);
+    }
+
+    @GetMapping("/get-all")
+    public List<EmployeeRespDto> getALl(){
+        return employeeService.getAll();
+    }
+
+    @PostMapping("/set-manager/{id}")
+    public EmployeeRespDto updateManager(@PathVariable long id){
+        return employeeService.updateManager(id);
     }
 }
