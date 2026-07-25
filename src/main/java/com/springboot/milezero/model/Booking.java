@@ -69,7 +69,7 @@ public class Booking {
     @JoinColumn(name = "vehicle_id", nullable = true) // Added during pickup
     private Vehicle vehicle;
 
-    @OneToMany(fetch = FetchType.LAZY)
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "booking")
     private List<BookingAddon> bookingAddons;
 
     @CreationTimestamp
