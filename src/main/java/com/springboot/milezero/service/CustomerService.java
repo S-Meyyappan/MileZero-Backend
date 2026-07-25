@@ -11,6 +11,7 @@ import com.springboot.milezero.model.User;
 import com.springboot.milezero.repository.CustomerRepository;
 import com.springboot.milezero.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,12 +22,14 @@ public class CustomerService {
 
     private final CustomerRepository customerRepository;
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
     public CustomerRespDto add(CustomerReqDto customerReqDto) {
         // 1. Get user from mapper
         User user = UserMapper.convertDtoToEntity(customerReqDto.email(),
                                                     customerReqDto.password(),
                                                     Role.CUSTOMER);
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         user = userRepository.save(user);
 
         // 2. Get Customer from mapper

@@ -15,6 +15,7 @@ import com.springboot.milezero.repository.EmployeeRepository;
 import com.springboot.milezero.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -26,6 +27,7 @@ public class EmployeeService {
     private final EmployeeRepository employeeRepository;
     private final UserRepository userRepository;
     private final BranchRepository branchRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Transactional
     public EmployeeRespDto add(EmployeeReqDto employeeReqDto) {
@@ -37,6 +39,7 @@ public class EmployeeService {
         User user = UserMapper.convertDtoToEntity(employeeReqDto.email(),
                                                     employeeReqDto.password(),
                                                     employeeReqDto.role());
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         user = userRepository.save(user);
 
         // 3. Get Employee from Dto
