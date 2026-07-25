@@ -51,7 +51,9 @@ public class BookingMapper {
                         booking.getVehicle().getFuelType(),
                         booking.getVehicle().getTransmission(),
                         booking.getVehicle().getDriveType(),
-                        booking.getVehicle().getWithAc()),
+                        booking.getVehicle().getWithAc(),
+                        booking.getVehicle().getSeatCount(),
+                        booking.getVehicle().getLuggageCapacity()),
                 new BranchRespDto(
                         booking.getPickupBranch().getName(),
                         booking.getPickupBranch().getCity(),

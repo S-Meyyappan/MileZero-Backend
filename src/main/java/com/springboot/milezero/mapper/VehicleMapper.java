@@ -23,6 +23,8 @@ public class VehicleMapper {
         vehicle.setCurrentOdometer(dto.currentOdometer());
         vehicle.setPurchaseDate(dto.purchaseDate());
         vehicle.setWithAc(dto.withAc());
+        vehicle.setSeatCount(dto.seatCount());
+        vehicle.setLuggageCapacity(dto.luggageCapacity());
         return vehicle;
     }
 
@@ -34,7 +36,9 @@ public class VehicleMapper {
                 vehicle.getFuelType(),
                 vehicle.getTransmission(),
                 vehicle.getDriveType(),
-                vehicle.getWithAc()
+                vehicle.getWithAc(),
+                vehicle.getSeatCount(),
+                vehicle.getLuggageCapacity()
         );
     }
 }

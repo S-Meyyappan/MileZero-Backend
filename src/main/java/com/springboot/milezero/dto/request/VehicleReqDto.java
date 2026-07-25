@@ -17,6 +17,8 @@ public record VehicleReqDto(
         DriveType driveType,
         long currentOdometer,
         LocalDate purchaseDate,
+        Integer seatCount,
+        Integer luggageCapacity,
         Boolean withAc,
         Long categoryId,
         Long branchId

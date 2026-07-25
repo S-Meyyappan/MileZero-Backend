@@ -60,6 +60,12 @@ public class Vehicle {
     private LocalDate purchaseDate;
 
     @Column(nullable = false)
+    private Integer seatCount;
+
+    @Column(nullable = false)
+    private Integer luggageCapacity;
+
+    @Column(nullable = false)
     private Boolean withAc;
 
     @ManyToOne

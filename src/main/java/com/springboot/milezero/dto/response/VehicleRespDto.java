@@ -11,6 +11,8 @@ public record VehicleRespDto(
         FuelType fuelType,
         Transmission transmission,
         DriveType driveType,
-        Boolean withAc
+        Boolean withAc,
+        Integer seatCount,
+        Integer luggageCapacity
 ) {
 }
