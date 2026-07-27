@@ -1,9 +1,12 @@
 package com.springboot.milezero.repository;
 
+import com.springboot.milezero.dto.response.AvailabileVehicleRespDto;
 import com.springboot.milezero.model.Vehicle;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 public interface VehicleRepository extends JpaRepository<Vehicle, Long> {
@@ -12,4 +15,23 @@ public interface VehicleRepository extends JpaRepository<Vehicle, Long> {
           SELECT v FROM Vehicle v WHERE v.category.id = :id
           """)
     Optional<Vehicle> findByCategoryId(long id);
+
+    @Query("""
+            SELECT c.id AS categoryId, c.name AS categoryName,
+                   COUNT(DISTINCT v.id) AS totalVehicles,
+                   (SELECT COUNT(b.id) FROM Booking b
+                   WHERE b.category.id = c.id
+                   AND b.plannedPickup < :chosenReturn
+                   AND b.plannedReturn > :chosenPickup) AS bookedVehicles,
+                   (COUNT(DISTINCT v.id) -
+                   (SELECT COUNT(b2.id) FROM Booking b2
+                   WHERE b2.category.id = c.id
+                       AND b2.plannedPickup < :chosenReturn
+                       AND b2.plannedReturn > :chosenPickup)) AS vehiclesAvailableToBook
+                   FROM Vehicle v
+                   RIGHT JOIN v.category c
+                   GROUP BY c.id, c.name
+            """)
+    List<AvailabileVehicleRespDto> getAllAvailableVehicles(LocalDateTime chosenPickup,
+                                                           LocalDateTime chosenReturn);
 }

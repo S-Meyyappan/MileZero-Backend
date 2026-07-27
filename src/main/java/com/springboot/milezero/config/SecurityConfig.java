@@ -26,7 +26,7 @@ public class SecurityConfig {
 
                         .requestMatchers("/api/vehicle/get-all").permitAll()
                         .requestMatchers("/api/employee/add").permitAll()
-                        .anyRequest().authenticated()
+                        .anyRequest().permitAll()
                 );
 
         return http.build();
