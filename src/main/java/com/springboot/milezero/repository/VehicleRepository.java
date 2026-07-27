@@ -34,4 +34,26 @@ public interface VehicleRepository extends JpaRepository<Vehicle, Long> {
             """)
     List<AvailabileVehicleRespDto> getAllAvailableVehicles(LocalDateTime chosenPickup,
                                                            LocalDateTime chosenReturn);
+
+    @Query("""
+            SELECT c.id AS categoryId, c.name AS categoryName,
+                   COUNT(DISTINCT v.id) AS totalVehicles,
+                   (SELECT COUNT(b.id) FROM Booking b
+                   WHERE b.category.id = c.id
+                   AND b.plannedPickup < :chosenReturn
+                   AND b.plannedReturn > :chosenPickup
+                   AND b.pickupBranch.id = :branchId ) AS bookedVehicles,
+                   (COUNT(DISTINCT v.id) -
+                   (SELECT COUNT(b2.id) FROM Booking b2
+                   WHERE b2.category.id = c.id
+                       AND b2.plannedPickup < :chosenReturn
+                       AND b2.plannedReturn > :chosenPickup
+                       AND b2.pickupBranch.id = :branchId )) AS vehiclesAvailableToBook
+                   FROM Vehicle v
+                   RIGHT JOIN v.category c ON v.branch.id = :branchId
+                   GROUP BY c.id, c.name
+            """)
+    List<AvailabileVehicleRespDto> getAllAvailableVehiclesByBranch(LocalDateTime chosenPickup,
+                                                                   LocalDateTime chosenReturn,
+                                                                   Long branchId);
 }

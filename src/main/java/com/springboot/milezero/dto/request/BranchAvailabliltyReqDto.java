@@ -1,0 +1,17 @@
+package com.springboot.milezero.dto.request;
+
+import jakarta.validation.constraints.NotNull;
+
+import java.time.LocalDateTime;
+
+public record BranchAvailabliltyReqDto(
+        @NotNull(message = "Field cannot be null")
+        LocalDateTime chosenPickup,
+
+        @NotNull(message = "Field cannot be null")
+        LocalDateTime chosenReturn,
+
+        @NotNull(message = "Field cannot be null")
+        Long branchId
+) {
+}
