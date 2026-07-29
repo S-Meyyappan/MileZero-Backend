@@ -1,6 +1,6 @@
 package com.springboot.milezero.dto.response;
 
-public record AvailabileVehicleRespDto(
+public record CategoryAvailabilityRespDto(
         Long categoryId,
         String categoryName,
         Long totalVehicles,

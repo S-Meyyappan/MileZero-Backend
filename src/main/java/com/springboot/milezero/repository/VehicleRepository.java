@@ -1,6 +1,6 @@
 package com.springboot.milezero.repository;
 
-import com.springboot.milezero.dto.response.AvailabileVehicleRespDto;
+import com.springboot.milezero.dto.response.CategoryAvailabilityRespDto;
 import com.springboot.milezero.model.Vehicle;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -32,8 +32,8 @@ public interface VehicleRepository extends JpaRepository<Vehicle, Long> {
                    RIGHT JOIN v.category c
                    GROUP BY c.id, c.name
             """)
-    List<AvailabileVehicleRespDto> getAllAvailableVehicles(LocalDateTime chosenPickup,
-                                                           LocalDateTime chosenReturn);
+    List<CategoryAvailabilityRespDto> getAllAvailableVehicles(LocalDateTime chosenPickup,
+                                                              LocalDateTime chosenReturn);
 
     @Query("""
             SELECT c.id AS categoryId, c.name AS categoryName,
@@ -53,7 +53,7 @@ public interface VehicleRepository extends JpaRepository<Vehicle, Long> {
                    RIGHT JOIN v.category c ON v.branch.id = :branchId
                    GROUP BY c.id, c.name
             """)
-    List<AvailabileVehicleRespDto> getAllAvailableVehiclesByBranch(LocalDateTime chosenPickup,
-                                                                   LocalDateTime chosenReturn,
-                                                                   Long branchId);
+    List<CategoryAvailabilityRespDto> getAllAvailableVehiclesByBranch(LocalDateTime chosenPickup,
+                                                                      LocalDateTime chosenReturn,
+                                                                      Long branchId);
 }
