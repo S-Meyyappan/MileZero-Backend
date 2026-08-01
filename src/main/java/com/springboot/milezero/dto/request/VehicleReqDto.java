@@ -5,6 +5,7 @@ import com.springboot.milezero.enums.FuelType;
 import com.springboot.milezero.enums.Transmission;
 
 import java.time.LocalDate;
+import java.util.List;
 
 public record VehicleReqDto(
         String registrationNo,
@@ -21,6 +22,7 @@ public record VehicleReqDto(
         Integer luggageCapacity,
         Boolean withAc,
         Long categoryId,
-        Long branchId
+        Long branchId,
+        List<Long> featureList
 ) {
 }

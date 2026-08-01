@@ -56,4 +56,9 @@ public interface VehicleRepository extends JpaRepository<Vehicle, Long> {
     List<CategoryAvailabilityRespDto> getAllAvailableVehiclesByBranch(LocalDateTime chosenPickup,
                                                                       LocalDateTime chosenReturn,
                                                                       Long branchId);
+
+    @Query("""
+            SELECT v FROM Vehicle v WHERE v.category.id = :id
+            """)
+    List<Vehicle> getAllByCategory(long id);
 }

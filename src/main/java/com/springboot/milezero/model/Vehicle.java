@@ -81,5 +81,4 @@ public class Vehicle {
 
     @UpdateTimestamp
     private Instant updatedAt;
-
 }

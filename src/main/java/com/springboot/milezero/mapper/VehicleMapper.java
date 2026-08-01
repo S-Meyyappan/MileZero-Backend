@@ -2,7 +2,10 @@ package com.springboot.milezero.mapper;
 
 import com.springboot.milezero.dto.request.VehicleReqDto;
 import com.springboot.milezero.dto.response.VehicleRespDto;
+import com.springboot.milezero.model.Feature;
 import com.springboot.milezero.model.Vehicle;
+
+import java.util.List;
 
 public class VehicleMapper {
 
@@ -28,7 +31,7 @@ public class VehicleMapper {
         return vehicle;
     }
 
-    public static VehicleRespDto convertEntityToDto(Vehicle vehicle) {
+    public static VehicleRespDto convertEntityToDto(Vehicle vehicle, List<Feature> featuresList) {
         return  new VehicleRespDto(
                 vehicle.getManufacturer(),
                 vehicle.getModel(),
@@ -38,7 +41,9 @@ public class VehicleMapper {
                 vehicle.getDriveType(),
                 vehicle.getWithAc(),
                 vehicle.getSeatCount(),
-                vehicle.getLuggageCapacity()
+                vehicle.getLuggageCapacity(),
+                vehicle.getCurrentOdometer(),
+                featuresList
         );
     }
 }

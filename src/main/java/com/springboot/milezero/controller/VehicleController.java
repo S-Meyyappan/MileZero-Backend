@@ -27,8 +27,8 @@ public class VehicleController {
     }
 
     @GetMapping("/get-by-category/{id}")
-    public VehicleRespDto getByCategory(@PathVariable long id){
-        return vehicleService.getByCategory(id);
+    public List<VehicleRespDto> getByCategory(@PathVariable long id){
+        return vehicleService.getAllByCategory(id);
     }
 
     @GetMapping("/get-all")
