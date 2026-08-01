@@ -3,10 +3,6 @@ package com.springboot.milezero.model;
 import com.springboot.milezero.enums.FeatureGroup;
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
-
-import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "feature")
@@ -32,10 +28,4 @@ public class Feature {
 
     @Column(nullable = false)
     private Boolean isActive = true;
-
-    @CreationTimestamp
-    private LocalDateTime createdAt;
-
-    @UpdateTimestamp
-    private LocalDateTime updatedAt;
 }

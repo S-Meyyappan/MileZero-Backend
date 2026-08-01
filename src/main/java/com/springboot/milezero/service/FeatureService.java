@@ -1,7 +1,6 @@
 package com.springboot.milezero.service;
 
 import com.springboot.milezero.dto.request.FeatureReqDto;
-import com.springboot.milezero.dto.response.FeatureRespDto;
 import com.springboot.milezero.enums.FeatureGroup;
 import com.springboot.milezero.mapper.FeatureMapper;
 import com.springboot.milezero.model.Feature;
@@ -18,31 +17,21 @@ public class FeatureService {
 
     private final FeatureRepository featureRepository;
 
-    public FeatureRespDto add(@Valid FeatureReqDto featureReqDto) {
+    public Feature add(@Valid FeatureReqDto featureReqDto) {
         Feature feature = FeatureMapper.convertDtoToEntity(featureReqDto);
 
         feature.setIsActive(true);
 
         feature = featureRepository.save(feature);
 
-        return FeatureMapper.convertEntityToDto(feature);
+        return feature;
     }
 
-    public List<FeatureRespDto> getAll() {
-        List<Feature> list = featureRepository.findAll();
-
-        return list
-                .stream()
-                .map(FeatureMapper::convertEntityToDto)
-                .toList();
+    public List<Feature> getAll() {
+        return featureRepository.findAll();
     }
 
-    public List<FeatureRespDto> getAllByFeatureGroup(FeatureGroup featureGroup) {
-        List<Feature> list = featureRepository.findByFeatureGroup(featureGroup);
-
-        return list
-                .stream()
-                .map(FeatureMapper::convertEntityToDto)
-                .toList();
+    public List<Feature> getAllByFeatureGroup(FeatureGroup featureGroup) {
+        return featureRepository.findByFeatureGroup(featureGroup);
     }
 }
