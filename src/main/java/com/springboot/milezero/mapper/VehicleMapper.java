@@ -60,7 +60,8 @@ public class VehicleMapper {
                 vehicle.getDriveType(),
                 vehicle.getWithAc(),
                 vehicle.getSeatCount(),
-                vehicle.getLuggageCapacity()
+                vehicle.getLuggageCapacity(),
+                CategoryMapper.convertEntityToDto(vehicle.getCategory())
         );
     }
 }

@@ -46,17 +46,6 @@ public class BookingMapper {
                         booking.getCustomer().getLicenseExpiryDate(),
                         booking.getCustomer().getPhone(),
                         booking.getCustomer().getInsurancePolicyNo()),
-                new VehicleDto(
-                        booking.getVehicle().getId(),
-                        booking.getVehicle().getManufacturer(),
-                        booking.getVehicle().getModel(),
-                        booking.getVehicle().getManufacturingYear(),
-                        booking.getVehicle().getFuelType(),
-                        booking.getVehicle().getTransmission(),
-                        booking.getVehicle().getDriveType(),
-                        booking.getVehicle().getWithAc(),
-                        booking.getVehicle().getSeatCount(),
-                        booking.getVehicle().getLuggageCapacity()),
                 new BranchRespDto(
                         booking.getPickupBranch().getId(),
                         booking.getPickupBranch().getName(),

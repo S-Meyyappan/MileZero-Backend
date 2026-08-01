@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 
 public record CategoryRespDto(
         Long id,
-        String categoryName,
+        String name,
         BigDecimal basePricePerDay,
         BigDecimal basePricePerHour,
         BigDecimal basePricePerKm,

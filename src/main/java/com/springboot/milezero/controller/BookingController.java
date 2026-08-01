@@ -17,7 +17,7 @@ public class BookingController {
 
     private final BookingService bookingService;
 
-    @GetMapping("/calculate-quote")
+    @PostMapping("/calculate-quote")
     public BookingQuoteRespDto getQuote(@Valid @RequestBody BookingReqDto bookingReqDto) {
         return bookingService.getQuote(bookingReqDto);
     }

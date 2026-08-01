@@ -14,6 +14,7 @@ public record VehicleDto(
         DriveType driveType,
         Boolean withAc,
         Integer seatCount,
-        Integer luggageCapacity
+        Integer luggageCapacity,
+        CategoryRespDto category
 ) {
 }

@@ -19,7 +19,6 @@ public record BookingRespDto(
         LocalDateTime plannedReturn,
         CategoryRespDto category,
         CustomerRespDto customer,
-        VehicleDto vehicle,
         BranchRespDto pickupBranch,
         BranchRespDto returnBranch,
         List<BookingAddonRespDto> bookingAddons
