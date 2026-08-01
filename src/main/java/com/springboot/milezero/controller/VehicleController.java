@@ -31,6 +31,11 @@ public class VehicleController {
         return vehicleService.getAllByCategory(id);
     }
 
+    @GetMapping("/get-by-branch/{id}")
+    public List<VehicleRespDto> getByBranch(@PathVariable long id){
+        return vehicleService.getAllByBranch(id);
+    }
+
     @GetMapping("/get-all")
     public List<VehicleRespDto> getALl(){
         return vehicleService.getAll();

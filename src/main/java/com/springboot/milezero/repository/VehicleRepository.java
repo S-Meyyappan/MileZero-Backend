@@ -61,4 +61,9 @@ public interface VehicleRepository extends JpaRepository<Vehicle, Long> {
             SELECT v FROM Vehicle v WHERE v.category.id = :id
             """)
     List<Vehicle> getAllByCategory(long id);
+
+    @Query("""
+            SELECT v FROM Vehicle v WHERE v.branch.id = :id
+            """)
+    List<Vehicle> getAllByBranch(long id);
 }

@@ -91,6 +91,27 @@ public class VehicleService {
                 .toList();
     }
 
+
+    public List<VehicleRespDto> getAllByBranch(long id) {
+        List<Vehicle> vehicles = vehicleRepository.getAllByBranch(id);
+
+        List<Long> vehicleIds = vehicles.stream()
+                .map(Vehicle::getId)
+                .toList();
+
+        List<VehicleFeature> vehicleFeatures = vehicleFeatureRepository.getAllByVehicleId(vehicleIds);
+
+        Map<Long, List<Feature>> map = vehicleFeatures.stream()
+                .collect(Collectors.groupingBy(
+                        vf -> vf.getVehicle().getId(),
+                        Collectors.mapping(VehicleFeature::getFeature, Collectors.toList())
+                ));
+
+        return vehicles.stream()
+                .map(v -> VehicleMapper.convertEntityToDto(v, map.get(v.getId())))
+                .toList();
+    }
+
     public List<VehicleRespDto> getAll() {
         List<Vehicle> vehicles = vehicleRepository.findAll();
 
