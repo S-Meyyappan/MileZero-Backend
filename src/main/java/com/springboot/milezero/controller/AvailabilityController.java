@@ -3,6 +3,7 @@ package com.springboot.milezero.controller;
 import com.springboot.milezero.dto.request.BranchAvailabliltyReqDto;
 import com.springboot.milezero.dto.request.GlobalAvailabilityReqDto;
 import com.springboot.milezero.dto.response.CategoryAvailabilityRespDto;
+import com.springboot.milezero.dto.response.VehicleDto;
 import com.springboot.milezero.service.AvailabilityService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -28,5 +29,10 @@ public class AvailabilityController {
     @GetMapping("/all-vehicles-by-branch")
     public List<CategoryAvailabilityRespDto> getAllVehiclesByBranch(@Valid @RequestBody BranchAvailabliltyReqDto branchAvailabliltyReqDto){
         return availabilityService.getAllVehiclesByBranch(branchAvailabliltyReqDto);
+    }
+
+    @GetMapping("/all-available-vehicles")
+    public List<VehicleDto> getAllAvailableVehicles(@Valid @RequestBody BranchAvailabliltyReqDto branchAvailabliltyReqDto){
+        return availabilityService.getAllAvailableVehicles(branchAvailabliltyReqDto);
     }
 }

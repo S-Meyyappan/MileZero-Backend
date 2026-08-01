@@ -66,7 +66,7 @@ public class Booking {
     private Branch returnBranch;
 
     @ManyToOne
-    @JoinColumn(name = "vehicle_id", nullable = true) // Added during pickup
+    @JoinColumn(name = "vehicle_id", nullable = false) // Added during pickup
     private Vehicle vehicle;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "booking") //If not mapped hibernate creates new join table so we specify the mapping explicitly

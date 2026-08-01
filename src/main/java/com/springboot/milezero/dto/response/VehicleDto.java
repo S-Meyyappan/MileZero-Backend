@@ -5,6 +5,7 @@ import com.springboot.milezero.enums.FuelType;
 import com.springboot.milezero.enums.Transmission;
 
 public record VehicleDto(
+        Long id,
         String manufacturer,
         String model,
         Integer manufacturingYear,

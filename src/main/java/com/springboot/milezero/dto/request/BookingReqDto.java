@@ -20,8 +20,8 @@ public record BookingReqDto(
         @NotNull(message = "Customer ID can't be empty")
         Long customerId,
 
-        @NotNull(message = "Category ID can't be empty")
-        Long categoryId,
+        @NotNull(message = "Vehicle ID can't be empty")
+        Long vehicleId,
 
         @NotNull(message = "Pickup branch ID can't be empty")
         Long pickupBranchId,

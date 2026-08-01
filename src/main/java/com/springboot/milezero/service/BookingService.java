@@ -33,6 +33,7 @@ public class BookingService {
     private final CustomerRepository customerRepository;
     private final CategoryRepository categoryRepository;
     private final AddonRepository addonRepository;
+    private final VehicleRepository vehicleRepository;
 
     private final BookingPricingUtil bookingPricingUtil;
 
@@ -45,8 +46,9 @@ public class BookingService {
                 .orElseThrow(() -> new ResourceNotFoundException("Return branch not found"));
         Customer customer = customerRepository.findById(bookingReqDto.customerId())
                 .orElseThrow(() -> new ResourceNotFoundException("Customer not found"));
-        Category category = categoryRepository.findById(bookingReqDto.categoryId())
-                .orElseThrow(() -> new ResourceNotFoundException("Category not found"));
+        Vehicle vehicle = vehicleRepository.findById(bookingReqDto.vehicleId())
+                .orElseThrow(() -> new ResourceNotFoundException("Vehicle not found"));
+        Category category = vehicle.getCategory();
 
         //Validate addon ids
         List<BookingAddonDto> list = bookingReqDto.bookingAddons();
@@ -67,7 +69,8 @@ public class BookingService {
         // Get booking quote
         BookingQuoteRespDto quote = getQuote(bookingReqDto);
 
-        // Attach customer, category, pickup branch, return branch to booking
+        // Attach customer, category, pickup branch, return branch, vehicle to booking
+        booking.setVehicle(vehicle);
         booking.setCustomer(customer);
         booking.setCategory(category);
         booking.setPickupBranch(pickupBranch);
@@ -95,8 +98,9 @@ public class BookingService {
 
     public BookingQuoteRespDto getQuote(@Valid BookingReqDto bookingReqDto) {
         // Validate Category
-        Category category = categoryRepository.findById(bookingReqDto.categoryId())
-                .orElseThrow(() -> new ResourceNotFoundException("Category not found"));
+        Vehicle vehicle = vehicleRepository.findById(bookingReqDto.vehicleId())
+                .orElseThrow(() -> new ResourceNotFoundException("Vehicle not found"));
+        Category category = vehicle.getCategory();
 
         //Validate addon ids
         List<BookingAddonDto> list = bookingReqDto.bookingAddons();

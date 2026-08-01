@@ -66,4 +66,16 @@ public interface VehicleRepository extends JpaRepository<Vehicle, Long> {
             SELECT v FROM Vehicle v WHERE v.branch.id = :id
             """)
     List<Vehicle> getAllByBranch(long id);
+
+    @Query("""
+            SELECT v FROM Vehicle v WHERE v.id NOT IN (
+                SELECT b.vehicle.id FROM Booking b
+                WHERE b.pickupBranch.id = :branchId
+                AND b.plannedPickup < :chosenReturn
+                AND b.plannedReturn > :chosenPickup
+            )
+            """)
+    List<Vehicle> getVehicleByAvailability(LocalDateTime chosenPickup,
+                                           LocalDateTime chosenReturn,
+                                           Long branchId);
 }
