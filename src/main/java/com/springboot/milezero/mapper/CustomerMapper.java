@@ -22,6 +22,7 @@ public class CustomerMapper {
 
     public static CustomerRespDto convertEntityToDto(Customer customer){
         return new CustomerRespDto(
+                customer.getId(),
                 customer.getName(),
                 customer.getLicenseNo(),
                 customer.getLicenseExpiryDate(),

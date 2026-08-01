@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public record BookingRespDto(
-        long bookingId,
+        Long bookingId,
         BigDecimal bookedRate,
         BookingType bookingType,
         BookingStatus bookingStatus,

@@ -33,18 +33,21 @@ public class BookingMapper {
                 booking.getPlannedPickup(),
                 booking.getPlannedReturn(),
                 new CategoryRespDto(
+                        booking.getCategory().getId(),
                         booking.getCategory().getName(),
                         booking.getCategory().getBasePricePerDay(),
                         booking.getCategory().getBasePricePerHour(),
                         booking.getCategory().getBasePricePerKm(),
                         booking.getCategory().getIncludedKmPerDay()),
                 new CustomerRespDto(
+                        booking.getCustomer().getId(),
                         booking.getCustomer().getName(),
                         booking.getCustomer().getLicenseNo(),
                         booking.getCustomer().getLicenseExpiryDate(),
                         booking.getCustomer().getPhone(),
                         booking.getCustomer().getInsurancePolicyNo()),
                 new VehicleDto(
+                        booking.getVehicle().getId(),
                         booking.getVehicle().getManufacturer(),
                         booking.getVehicle().getModel(),
                         booking.getVehicle().getManufacturingYear(),
@@ -55,11 +58,13 @@ public class BookingMapper {
                         booking.getVehicle().getSeatCount(),
                         booking.getVehicle().getLuggageCapacity()),
                 new BranchRespDto(
+                        booking.getPickupBranch().getId(),
                         booking.getPickupBranch().getName(),
                         booking.getPickupBranch().getCity(),
                         booking.getPickupBranch().getAddress(),
                         booking.getPickupBranch().getPhone()),
                 new BranchRespDto(
+                        booking.getReturnBranch().getId(),
                         booking.getReturnBranch().getName(),
                         booking.getReturnBranch().getCity(),
                         booking.getReturnBranch().getAddress(),

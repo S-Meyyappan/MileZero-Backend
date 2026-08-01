@@ -7,10 +7,7 @@ import com.springboot.milezero.dto.response.VehicleDto;
 import com.springboot.milezero.service.AvailabilityService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -34,5 +31,11 @@ public class AvailabilityController {
     @GetMapping("/all-available-vehicles")
     public List<VehicleDto> getAllAvailableVehicles(@Valid @RequestBody BranchAvailabliltyReqDto branchAvailabliltyReqDto){
         return availabilityService.getAllAvailableVehicles(branchAvailabliltyReqDto);
+    }
+
+    @GetMapping("/all-available-vehicles-by-category/{id}")
+    public List<VehicleDto> getAllAvailableVehicles(@Valid @RequestBody BranchAvailabliltyReqDto branchAvailabliltyReqDto,
+                                                    @PathVariable long id){
+        return availabilityService.getAllAvailableVehiclesByCategory(branchAvailabliltyReqDto, id);
     }
 }

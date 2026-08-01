@@ -51,4 +51,16 @@ public class AvailabilityService {
                 .map(VehicleMapper::convertEntityToDto)
                 .toList();
     }
+
+    public List<VehicleDto> getAllAvailableVehiclesByCategory(BranchAvailabliltyReqDto branchAvailabliltyReqDto, long id) {
+        List<Vehicle> list = vehicleRepository.getAllAvailableVehiclesByCategory(
+                branchAvailabliltyReqDto.chosenPickup(),
+                branchAvailabliltyReqDto.chosenReturn(),
+                branchAvailabliltyReqDto.branchId(),
+                id );
+
+        return list.stream()
+                .map(VehicleMapper::convertEntityToDto)
+                .toList();
+    }
 }

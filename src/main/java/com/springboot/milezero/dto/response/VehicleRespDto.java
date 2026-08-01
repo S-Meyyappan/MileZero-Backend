@@ -8,6 +8,7 @@ import com.springboot.milezero.model.Feature;
 import java.util.List;
 
 public record VehicleRespDto(
+        Long id,
         String manufacturer,
         String model,
         Integer manufacturingYear,

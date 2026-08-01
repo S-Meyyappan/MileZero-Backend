@@ -34,6 +34,7 @@ public class VehicleMapper {
 
     public static VehicleRespDto convertEntityToDto(Vehicle vehicle, List<Feature> featuresList) {
         return  new VehicleRespDto(
+                vehicle.getId(),
                 vehicle.getManufacturer(),
                 vehicle.getModel(),
                 vehicle.getManufacturingYear(),
@@ -50,6 +51,7 @@ public class VehicleMapper {
 
     public static VehicleDto convertEntityToDto(Vehicle vehicle) {
         return  new VehicleDto(
+                vehicle.getId(),
                 vehicle.getManufacturer(),
                 vehicle.getModel(),
                 vehicle.getManufacturingYear(),

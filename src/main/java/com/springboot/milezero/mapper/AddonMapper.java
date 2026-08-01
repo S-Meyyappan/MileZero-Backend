@@ -19,6 +19,7 @@ public class AddonMapper {
 
     public static AddonRespDto convertEntityTODto(Addon addon){
         return new AddonRespDto(
+                addon.getId(),
                 addon.getName(),
                 addon.getPricePerDay()
         );

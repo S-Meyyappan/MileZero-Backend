@@ -12,6 +12,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/branch")
+@CrossOrigin("http://localhost:5173")
 public class BranchController {
 
     private final BranchService branchService;
