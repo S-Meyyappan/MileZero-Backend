@@ -1,0 +1,18 @@
+package com.springboot.milezero.dto.response;
+
+import com.springboot.milezero.enums.DriveType;
+import com.springboot.milezero.enums.FuelType;
+import com.springboot.milezero.enums.Transmission;
+
+public record VehicleDto(
+        String manufacturer,
+        String model,
+        Integer manufacturingYear,
+        FuelType fuelType,
+        Transmission transmission,
+        DriveType driveType,
+        Boolean withAc,
+        Integer seatCount,
+        Integer luggageCapacity
+) {
+}

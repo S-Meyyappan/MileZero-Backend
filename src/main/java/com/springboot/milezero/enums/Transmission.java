@@ -2,6 +2,10 @@ package com.springboot.milezero.enums;
 
 public enum Transmission {
     AMT,
-    MAN
+    MT,
+    AT,
+    CVT,
+    IVT,
+    DCT
 }
 

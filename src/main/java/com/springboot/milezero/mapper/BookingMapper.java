@@ -44,7 +44,7 @@ public class BookingMapper {
                         booking.getCustomer().getLicenseExpiryDate(),
                         booking.getCustomer().getPhone(),
                         booking.getCustomer().getInsurancePolicyNo()),
-                new VehicleRespDto(
+                new VehicleDto(
                         booking.getVehicle().getManufacturer(),
                         booking.getVehicle().getModel(),
                         booking.getVehicle().getManufacturingYear(),
