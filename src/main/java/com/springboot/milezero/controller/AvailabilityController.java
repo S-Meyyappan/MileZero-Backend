@@ -4,6 +4,7 @@ import com.springboot.milezero.dto.request.BranchAvailabliltyReqDto;
 import com.springboot.milezero.dto.request.GlobalAvailabilityReqDto;
 import com.springboot.milezero.dto.response.CategoryAvailabilityRespDto;
 import com.springboot.milezero.dto.response.VehicleDto;
+import com.springboot.milezero.enums.FilterSort;
 import com.springboot.milezero.service.AvailabilityService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -43,5 +44,22 @@ public class AvailabilityController {
                                                     @RequestParam(required = false, defaultValue = "0") int page,
                                                     @RequestParam(required = false, defaultValue = "8") int size){
         return availabilityService.getAllAvailableVehiclesByCategory(branchAvailabliltyReqDto, id, page, size);
+    }
+
+    @PostMapping("/fleet")
+    public Page<VehicleDto> getAvailableFleet(
+            @Valid @RequestBody BranchAvailabliltyReqDto branchAvailabliltyReqDto,
+            @RequestParam(required = false) String search,
+            @RequestParam(required = false) String brand,
+            @RequestParam(required = false) String fuelType,
+            @RequestParam(required = false) String transmission,
+            @RequestParam(required = false) Integer seats,
+            @RequestParam(required = false) String category,
+            @RequestParam(required = false, defaultValue = "0") int page,
+            @RequestParam(required = false, defaultValue = "8") int size,
+            @RequestParam(required = false, defaultValue = "DEFAULT") FilterSort filterSort
+            ) { // Automatically handles your page, size, and dynamic sorting combinations!
+
+        return availabilityService.getAvailablefleet(branchAvailabliltyReqDto, search, brand, fuelType, transmission, seats, category, page, size, filterSort);
     }
 }
