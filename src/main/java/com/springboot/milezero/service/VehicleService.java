@@ -2,6 +2,8 @@ package com.springboot.milezero.service;
 
 import com.springboot.milezero.dto.request.VehicleReqDto;
 import com.springboot.milezero.dto.response.VehicleRespDto;
+import com.springboot.milezero.enums.FuelType;
+import com.springboot.milezero.enums.Transmission;
 import com.springboot.milezero.exception.ResourceNotFoundException;
 import com.springboot.milezero.mapper.VehicleFeatureMapper;
 import com.springboot.milezero.mapper.VehicleMapper;
@@ -11,6 +13,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -155,5 +158,25 @@ public class VehicleService {
         List<Feature> featuresList = vehicleFeatureRepository.getAllFeatures(id);
 
         return VehicleMapper.convertEntityToDto(vehicle, featuresList);
+    }
+
+    public List<String> getAllBrands() {
+        return vehicleRepository.getAllBrands();
+    }
+
+    public List<String> getAllFuelTypes() {
+        return Arrays.stream(FuelType.values())
+                .map(FuelType::name)
+                .toList();
+    }
+
+    public List<String> getAllTransmissions() {
+        return Arrays.stream(Transmission.values())
+                .map(Transmission::name)
+                .toList();
+    }
+
+    public List<Integer> getAllSeats() {
+        return vehicleRepository.getAllSeats();
     }
 }

@@ -97,4 +97,14 @@ public interface VehicleRepository extends JpaRepository<Vehicle, Long>, JpaSpec
                                                     Long branchId,
                                                     Long id,
                                                     Pageable pageable);
+
+    @Query("""
+            SELECT DISTINCT v.manufacturer FROM Vehicle v
+            """)
+    List<String> getAllBrands();
+
+    @Query("""
+            SELECT DISTINCT v.seatCount FROM Vehicle v
+            """)
+    List<Integer> getAllSeats();
 }

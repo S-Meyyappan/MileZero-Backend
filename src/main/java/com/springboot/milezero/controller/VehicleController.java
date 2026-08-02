@@ -12,6 +12,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/vehicle")
 @RequiredArgsConstructor
+@CrossOrigin("http://localhost:5173")
 public class VehicleController {
 
     private final VehicleService vehicleService;
@@ -46,4 +47,26 @@ public class VehicleController {
                         @Valid @RequestBody VehicleReqDto vehicleReqDto){
         return vehicleService.update(vehicleReqDto, id);
     }
+
+    @GetMapping("/get-all-brands")
+    public List<String> getAllBrands(){
+        return vehicleService.getAllBrands();
+    }
+
+    @GetMapping("/get-all-fuel-types")
+    public List<String> getAllFuelTypes(){
+        return vehicleService.getAllFuelTypes();
+    }
+
+    @GetMapping("/get-all-transmissions")
+    public List<String> getAllTransmissions(){
+        return vehicleService.getAllTransmissions();
+    }
+
+    @GetMapping("/get-all-seats")
+    public List<Integer> getAllSeats(){
+        return vehicleService.getAllSeats();
+    }
+
+
 }
