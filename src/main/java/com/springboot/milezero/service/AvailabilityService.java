@@ -11,6 +11,9 @@ import com.springboot.milezero.repository.BranchRepository;
 import com.springboot.milezero.repository.VehicleRepository;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -40,27 +43,33 @@ public class AvailabilityService {
         );
     }
 
-    public List<VehicleDto> getAllAvailableVehicles(@Valid BranchAvailabliltyReqDto branchAvailabliltyReqDto) {
-        List<Vehicle> list = vehicleRepository.getVehicleByAvailability(
-                branchAvailabliltyReqDto.chosenPickup(),
-                branchAvailabliltyReqDto.chosenReturn(),
-                branchAvailabliltyReqDto.branchId()
-        );
+    public Page<VehicleDto> getAllAvailableVehicles(@Valid BranchAvailabliltyReqDto branchAvailabliltyReqDto, int page, int size) {
 
-        return list.stream()
-                .map(VehicleMapper::convertEntityToDto)
-                .toList();
-    }
+        Pageable pageable = PageRequest.of(page, size);
 
-    public List<VehicleDto> getAllAvailableVehiclesByCategory(BranchAvailabliltyReqDto branchAvailabliltyReqDto, long id) {
-        List<Vehicle> list = vehicleRepository.getAllAvailableVehiclesByCategory(
+        Page<Vehicle> list = vehicleRepository.getVehicleByAvailability(
                 branchAvailabliltyReqDto.chosenPickup(),
                 branchAvailabliltyReqDto.chosenReturn(),
                 branchAvailabliltyReqDto.branchId(),
-                id );
+                pageable
+        );
 
-        return list.stream()
-                .map(VehicleMapper::convertEntityToDto)
-                .toList();
+        return list.map(VehicleMapper::convertEntityToDto);
+    }
+
+    public Page<VehicleDto> getAllAvailableVehiclesByCategory(BranchAvailabliltyReqDto branchAvailabliltyReqDto,
+                                                              long id,
+                                                              int page,
+                                                              int size) {
+        Pageable pageable = PageRequest.of(page, size);
+
+        Page<Vehicle> list = vehicleRepository.getAllAvailableVehiclesByCategory(
+                branchAvailabliltyReqDto.chosenPickup(),
+                branchAvailabliltyReqDto.chosenReturn(),
+                branchAvailabliltyReqDto.branchId(),
+                id,
+                pageable);
+
+        return list.map(VehicleMapper::convertEntityToDto);
     }
 }

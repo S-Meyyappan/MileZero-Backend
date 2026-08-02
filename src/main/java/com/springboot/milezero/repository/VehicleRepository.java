@@ -2,6 +2,8 @@ package com.springboot.milezero.repository;
 
 import com.springboot.milezero.dto.response.CategoryAvailabilityRespDto;
 import com.springboot.milezero.model.Vehicle;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -75,9 +77,10 @@ public interface VehicleRepository extends JpaRepository<Vehicle, Long> {
                 AND b.plannedReturn > :chosenPickup
             )
             """)
-    List<Vehicle> getVehicleByAvailability(LocalDateTime chosenPickup,
+    Page<Vehicle> getVehicleByAvailability(LocalDateTime chosenPickup,
                                            LocalDateTime chosenReturn,
-                                           Long branchId);
+                                           Long branchId,
+                                           Pageable pageable);
 
     @Query("""
             SELECT v FROM Vehicle v WHERE v.id NOT IN (
@@ -88,8 +91,9 @@ public interface VehicleRepository extends JpaRepository<Vehicle, Long> {
                 AND b.plannedReturn > :chosenPickup
             )
             """)
-    List<Vehicle> getAllAvailableVehiclesByCategory(LocalDateTime chosenPickup,
+    Page<Vehicle> getAllAvailableVehiclesByCategory(LocalDateTime chosenPickup,
                                                     LocalDateTime chosenReturn,
                                                     Long branchId,
-                                                    Long id);
+                                                    Long id,
+                                                    Pageable pageable);
 }

@@ -7,6 +7,7 @@ import com.springboot.milezero.dto.response.VehicleDto;
 import com.springboot.milezero.service.AvailabilityService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -30,13 +31,17 @@ public class AvailabilityController {
     }
 
     @PostMapping("/all-available-vehicles")
-    public List<VehicleDto> getAllAvailableVehicles(@Valid @RequestBody BranchAvailabliltyReqDto branchAvailabliltyReqDto){
-        return availabilityService.getAllAvailableVehicles(branchAvailabliltyReqDto);
+    public Page<VehicleDto> getAllAvailableVehicles(@Valid @RequestBody BranchAvailabliltyReqDto branchAvailabliltyReqDto,
+                                                    @RequestParam(required = false, defaultValue = "0") int page,
+                                                    @RequestParam(required = false, defaultValue = "8") int size){
+        return availabilityService.getAllAvailableVehicles(branchAvailabliltyReqDto, page, size);
     }
 
     @PostMapping("/all-available-vehicles-by-category/{id}")
-    public List<VehicleDto> getAllAvailableVehicles(@Valid @RequestBody BranchAvailabliltyReqDto branchAvailabliltyReqDto,
-                                                    @PathVariable long id){
-        return availabilityService.getAllAvailableVehiclesByCategory(branchAvailabliltyReqDto, id);
+    public Page<VehicleDto> getAllAvailableVehicles(@Valid @RequestBody BranchAvailabliltyReqDto branchAvailabliltyReqDto,
+                                                    @PathVariable long id,
+                                                    @RequestParam(required = false, defaultValue = "0") int page,
+                                                    @RequestParam(required = false, defaultValue = "8") int size){
+        return availabilityService.getAllAvailableVehiclesByCategory(branchAvailabliltyReqDto, id, page, size);
     }
 }
