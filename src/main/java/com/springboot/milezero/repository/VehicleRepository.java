@@ -8,7 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 
@@ -35,8 +35,8 @@ public interface VehicleRepository extends JpaRepository<Vehicle, Long>, JpaSpec
                    RIGHT JOIN v.category c
                    GROUP BY c.id, c.name
             """)
-    List<CategoryAvailabilityRespDto> getAllAvailableVehicles(LocalDateTime chosenPickup,
-                                                              LocalDateTime chosenReturn);
+    List<CategoryAvailabilityRespDto> getAllAvailableVehicles(Instant chosenPickup,
+                                                              Instant chosenReturn);
 
     @Query("""
             SELECT c.id AS categoryId, c.name AS categoryName,
@@ -56,8 +56,8 @@ public interface VehicleRepository extends JpaRepository<Vehicle, Long>, JpaSpec
                    RIGHT JOIN v.category c ON v.branch.id = :branchId
                    GROUP BY c.id, c.name
             """)
-    List<CategoryAvailabilityRespDto> getAllAvailableVehiclesByBranch(LocalDateTime chosenPickup,
-                                                                      LocalDateTime chosenReturn,
+    List<CategoryAvailabilityRespDto> getAllAvailableVehiclesByBranch(Instant chosenPickup,
+                                                                      Instant chosenReturn,
                                                                       Long branchId);
 
     @Query("""
@@ -78,8 +78,8 @@ public interface VehicleRepository extends JpaRepository<Vehicle, Long>, JpaSpec
                 AND b.plannedReturn > :chosenPickup
             )
             """)
-    Page<Vehicle> getVehicleByAvailability(LocalDateTime chosenPickup,
-                                           LocalDateTime chosenReturn,
+    Page<Vehicle> getVehicleByAvailability(Instant chosenPickup,
+                                           Instant chosenReturn,
                                            Long branchId,
                                            Pageable pageable);
 
@@ -92,8 +92,8 @@ public interface VehicleRepository extends JpaRepository<Vehicle, Long>, JpaSpec
                 AND b.plannedReturn > :chosenPickup
             )
             """)
-    Page<Vehicle> getAllAvailableVehiclesByCategory(LocalDateTime chosenPickup,
-                                                    LocalDateTime chosenReturn,
+    Page<Vehicle> getAllAvailableVehiclesByCategory(Instant chosenPickup,
+                                                    Instant chosenReturn,
                                                     Long branchId,
                                                     Long id,
                                                     Pageable pageable);

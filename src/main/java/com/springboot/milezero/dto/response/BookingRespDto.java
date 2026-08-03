@@ -4,7 +4,7 @@ import com.springboot.milezero.enums.BookingStatus;
 import com.springboot.milezero.enums.BookingType;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.List;
 
 public record BookingRespDto(
@@ -15,8 +15,8 @@ public record BookingRespDto(
         BigDecimal estimatedCost,
         BigDecimal finalCost,
         int includedKm,
-        LocalDateTime plannedPickup,
-        LocalDateTime plannedReturn,
+        Instant plannedPickup,
+        Instant plannedReturn,
         CategoryRespDto category,
         CustomerRespDto customer,
         BranchRespDto pickupBranch,

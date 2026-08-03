@@ -2,11 +2,12 @@ package com.springboot.milezero.dto.response;
 
 import com.springboot.milezero.enums.FuelLevel;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
+
 
 public record PickuplogRespDto(
         Long id,
-        LocalDateTime actualPickup,
+        Instant actualPickup,
         Long odometer,
         FuelLevel fuelLevel,
         String remarks,

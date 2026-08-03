@@ -19,6 +19,7 @@ public record VehicleRespDto(
         Integer seatCount,
         Integer luggageCapacity,
         Long currentOdometer,
+        CategoryRespDto category,
         List<Feature> features
 ) {
 }

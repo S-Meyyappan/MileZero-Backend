@@ -2,13 +2,14 @@ package com.springboot.milezero.dto.request;
 
 import jakarta.validation.constraints.NotNull;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
+
 
 public record GlobalAvailabilityReqDto(
         @NotNull(message = "Field cannot be null")
-        LocalDateTime chosenPickup,
+        Instant chosenPickup,
 
         @NotNull(message = "Field cannot be null")
-        LocalDateTime chosenReturn
+        Instant chosenReturn
 ) {
 }

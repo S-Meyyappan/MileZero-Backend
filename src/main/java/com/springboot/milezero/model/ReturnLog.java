@@ -8,7 +8,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import java.math.BigDecimal;
 import java.time.Instant;
-import java.time.LocalDateTime;
+
 
 @Entity
 @Table(name = "return_log")
@@ -25,7 +25,7 @@ public class Returnlog {
     private long id;
 
     @Column(nullable = false)
-    private LocalDateTime actualReturn;
+    private Instant actualReturn;
 
     @Column(nullable = false)
     private long odometer;

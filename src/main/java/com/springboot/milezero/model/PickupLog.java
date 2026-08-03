@@ -7,7 +7,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.Instant;
-import java.time.LocalDateTime;
+
 
 @Entity
 @Table(name = "pickup_log")
@@ -24,7 +24,7 @@ public class Pickuplog {
     private long id;
 
     @Column(nullable = false)
-    private LocalDateTime actualPickup;
+    private Instant actualPickup;
 
     @Column(nullable = false)
     private long odometer;

@@ -9,7 +9,6 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import java.math.BigDecimal;
 import java.time.Instant;
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -26,10 +25,10 @@ public class Booking {
     private long id;
 
     @Column(nullable = false)
-    private LocalDateTime plannedPickup;
+    private Instant plannedPickup;
 
     @Column(nullable = false)
-    private LocalDateTime plannedReturn;
+    private Instant plannedReturn;
 
     @Column(nullable = false)
     private int includedKm;

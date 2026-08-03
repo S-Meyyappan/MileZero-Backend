@@ -5,15 +5,15 @@ import com.springboot.milezero.model.Vehicle;
 import jakarta.persistence.criteria.*;
 import org.springframework.data.jpa.domain.Specification;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
-public class VehicleSpecification {
+public class VehicleFilterSpecification {
 
     public static Specification<Vehicle> getAvailableFleet(
-                                            LocalDateTime chosenPickup,
-                                            LocalDateTime chosenReturn,
+                                            Instant chosenPickup,
+                                            Instant chosenReturn,
                                             Long branchId,
                                             String search,
                                             String brand,

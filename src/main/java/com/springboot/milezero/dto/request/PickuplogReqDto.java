@@ -4,11 +4,12 @@ import com.springboot.milezero.enums.FuelLevel;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
+
 
 public record PickuplogReqDto(
         @NotNull(message = "Actual pickup date can't be empty")
-        LocalDateTime actualPickup,
+        Instant actualPickup,
 
         @Positive(message = "Odometer can't be empty")
         long odometer,

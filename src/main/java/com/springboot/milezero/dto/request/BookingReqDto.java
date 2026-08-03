@@ -4,15 +4,15 @@ import com.springboot.milezero.enums.BookingType;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PositiveOrZero;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.List;
 
 public record BookingReqDto(
         @NotNull(message = "Planned pickup date can't be empty")
-        LocalDateTime plannedPickup,
+        Instant plannedPickup,
 
         @NotNull(message = "Planned return date can't be empty")
-        LocalDateTime plannedReturn,
+        Instant plannedReturn,
 
         @PositiveOrZero(message = "Included kilometers can't be negative")
         int requestedKm,

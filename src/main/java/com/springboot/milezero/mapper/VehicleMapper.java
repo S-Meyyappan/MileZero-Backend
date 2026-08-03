@@ -45,6 +45,7 @@ public class VehicleMapper {
                 vehicle.getSeatCount(),
                 vehicle.getLuggageCapacity(),
                 vehicle.getCurrentOdometer(),
+                CategoryMapper.convertEntityToDto(vehicle.getCategory()),
                 featuresList
         );
     }
