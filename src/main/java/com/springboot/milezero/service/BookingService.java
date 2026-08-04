@@ -22,6 +22,8 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.Duration;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -93,7 +95,10 @@ public class BookingService {
 
         // Batch save all bookingAddons to db
         bookingAddonRepository.saveAll(bookingAddons);
-        return BookingMapper.convertEntityToDto(savedBooking);
+
+        List<BookingAddon> bookingAddonList = bookingAddonRepository.findAllByBooking(savedBooking.getId());
+
+        return BookingMapper.convertEntityToDto(savedBooking, bookingAddonList);
     }
 
     public BookingQuoteRespDto getQuote(@Valid BookingReqDto bookingReqDto) {
@@ -141,33 +146,83 @@ public class BookingService {
         Booking booking = bookingRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Booking Id Invalid"));
 
-        return BookingMapper.convertEntityToDto(booking);
+        List<BookingAddon> bookingAddonList = bookingAddonRepository.findAllByBooking(booking.getId());
+
+        return BookingMapper.convertEntityToDto(booking, bookingAddonList);
     }
 
     public List<BookingRespDto> getByBranch(long id) {
         List<Booking> list = bookingRepository.findByBranchId(id);
 
+        //Get All Booking Ids
+        List<Long> bookingIds = list.stream().map(Booking::getId).toList();
+
+        //Get All Booking Addons
+        List<BookingAddon> bookingAddonList = bookingAddonRepository.findAllByBookingIdIn(bookingIds);
+
+        //Map BookingId to BookingAddons
+        Map<Long, List<BookingAddon>> bookingAddonMap = bookingAddonList.stream()
+                .collect(
+                        Collectors.groupingBy(b -> b.getBooking().getId())
+                );
+
         return list
                 .stream()
-                .map(BookingMapper::convertEntityToDto)
+                .map(b -> BookingMapper.
+                        convertEntityToDto(
+                                b,
+                                bookingAddonMap.getOrDefault(b.getId(), List.of()) // If no booking addons exist of this booking, return empty list
+                        ))
                 .toList();
     }
 
     public List<BookingRespDto> getByVehicle(long id) {
         List<Booking> list = bookingRepository.findByVehicleId(id);
 
+        //Get All Booking Ids
+        List<Long> bookingIds = list.stream().map(Booking::getId).toList();
+
+        //Get All Booking Addons
+        List<BookingAddon> bookingAddonList = bookingAddonRepository.findAllByBookingIdIn(bookingIds);
+
+        //Map BookingId to BookingAddons
+        Map<Long, List<BookingAddon>> bookingAddonMap = bookingAddonList.stream()
+                .collect(
+                        Collectors.groupingBy(b -> b.getBooking().getId())
+                );
+
         return list
                 .stream()
-                .map(BookingMapper::convertEntityToDto)
+                .map(b -> BookingMapper.
+                        convertEntityToDto(
+                                b,
+                                bookingAddonMap.getOrDefault(b.getId(), List.of()) // If no booking addons exist of this booking, return empty list
+                        ))
                 .toList();
     }
 
     public List<BookingRespDto> getByCustomer(String customerName) {
         List<Booking> list = bookingRepository.findByCustomerName(customerName);
 
+        //Get All Booking Ids
+        List<Long> bookingIds = list.stream().map(Booking::getId).toList();
+
+        //Get All Booking Addons
+        List<BookingAddon> bookingAddonList = bookingAddonRepository.findAllByBookingIdIn(bookingIds);
+
+        //Map BookingId to BookingAddons
+        Map<Long, List<BookingAddon>> bookingAddonMap = bookingAddonList.stream()
+                .collect(
+                        Collectors.groupingBy(b -> b.getBooking().getId())
+                );
+
         return list
                 .stream()
-                .map(BookingMapper::convertEntityToDto)
+                .map(b -> BookingMapper.
+                        convertEntityToDto(
+                                b,
+                                bookingAddonMap.getOrDefault(b.getId(), List.of()) // If no booking addons exist of this booking, return empty list
+                        ))
                 .toList();
     }
 }

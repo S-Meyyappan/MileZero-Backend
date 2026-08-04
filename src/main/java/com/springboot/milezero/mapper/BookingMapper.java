@@ -1,9 +1,15 @@
 package com.springboot.milezero.mapper;
 
 import com.springboot.milezero.dto.request.BookingReqDto;
-import com.springboot.milezero.dto.response.*;
+import com.springboot.milezero.dto.response.BookingRespDto;
+import com.springboot.milezero.dto.response.BranchRespDto;
+import com.springboot.milezero.dto.response.CategoryRespDto;
+import com.springboot.milezero.dto.response.CustomerRespDto;
 import com.springboot.milezero.enums.BookingStatus;
 import com.springboot.milezero.model.Booking;
+import com.springboot.milezero.model.BookingAddon;
+
+import java.util.List;
 
 public class BookingMapper {
 
@@ -21,7 +27,7 @@ public class BookingMapper {
         return booking;
     }
 
-    public static BookingRespDto convertEntityToDto(Booking booking){
+    public static BookingRespDto convertEntityToDto(Booking booking, List<BookingAddon> bookingAddons){
         return new BookingRespDto(
                 booking.getId(),
                 booking.getBookedRate(),
@@ -58,8 +64,7 @@ public class BookingMapper {
                         booking.getReturnBranch().getCity(),
                         booking.getReturnBranch().getAddress(),
                         booking.getReturnBranch().getPhone()),
-                booking.getBookingAddons()
-                        .stream()
+                bookingAddons.stream()
                         .map(BookingAddonMapper::convertEntityToDto)
                         .toList()
         );
