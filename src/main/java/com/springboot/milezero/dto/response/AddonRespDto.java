@@ -5,6 +5,8 @@ import java.math.BigDecimal;
 public record AddonRespDto(
         Long id,
         String name,
-        BigDecimal pricePerDay
+        BigDecimal pricePerDay,
+        String icon,
+        String description
 ) {
 }

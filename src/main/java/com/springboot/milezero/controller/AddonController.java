@@ -12,6 +12,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/addon")
+@CrossOrigin("http://localhost:5173")
 public class AddonController {
 
     private final AddonService addonService;

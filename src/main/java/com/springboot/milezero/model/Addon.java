@@ -23,4 +23,10 @@ public class Addon {
 
     @Column(nullable = false)
     private BigDecimal pricePerDay;
+
+    @Column(nullable = false)
+    private String icon;
+
+    @Column(nullable = false, length = 1000)
+    private String description;
 }

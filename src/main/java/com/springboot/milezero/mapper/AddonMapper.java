@@ -21,7 +21,9 @@ public class AddonMapper {
         return new AddonRespDto(
                 addon.getId(),
                 addon.getName(),
-                addon.getPricePerDay()
+                addon.getPricePerDay(),
+                addon.getIcon(),
+                addon.getDescription()
         );
     }
 }
