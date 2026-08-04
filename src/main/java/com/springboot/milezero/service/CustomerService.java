@@ -26,7 +26,8 @@ public class CustomerService {
 
     public CustomerRespDto add(CustomerReqDto customerReqDto) {
         // 1. Get user from mapper
-        User user = UserMapper.convertDtoToEntity(customerReqDto.email(),
+        User user = UserMapper.convertDtoToEntity(customerReqDto.name(),
+                                                    customerReqDto.email(),
                                                     customerReqDto.password(),
                                                     Role.CUSTOMER);
         user.setPassword(passwordEncoder.encode(user.getPassword()));

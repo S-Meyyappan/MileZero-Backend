@@ -36,7 +36,8 @@ public class EmployeeService {
             .orElseThrow(() -> new ResourceNotFoundException("Branch Id Invalid"));
 
         // 2. Add user to db
-        User user = UserMapper.convertDtoToEntity(employeeReqDto.email(),
+        User user = UserMapper.convertDtoToEntity(employeeReqDto.name(),
+                                                    employeeReqDto.email(),
                                                     employeeReqDto.password(),
                                                     employeeReqDto.role());
         user.setPassword(passwordEncoder.encode(user.getPassword()));

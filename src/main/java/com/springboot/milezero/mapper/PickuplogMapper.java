@@ -22,7 +22,7 @@ public class PickuplogMapper {
                 pickuplog.getOdometer(),
                 pickuplog.getFuelLevel(),
                 pickuplog.getRemarks(),
-                pickuplog.getEmployee().getName()
+                pickuplog.getEmployee().getUser().getName()
            );
     }
 }

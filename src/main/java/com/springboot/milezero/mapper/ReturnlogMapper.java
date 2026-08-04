@@ -23,7 +23,7 @@ public class ReturnlogMapper {
                 returnlog.getFuelLevel(),
                 returnlog.getExtraCharges(),
                 returnlog.getRemarks(),
-                returnlog.getEmployee().getName()
+                returnlog.getEmployee().getUser().getName()
         );
     }
 }

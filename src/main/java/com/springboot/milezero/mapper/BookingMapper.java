@@ -47,7 +47,7 @@ public class BookingMapper {
                         booking.getCategory().getIncludedKmPerDay()),
                 new CustomerRespDto(
                         booking.getCustomer().getId(),
-                        booking.getCustomer().getName(),
+                        booking.getCustomer().getUser().getName(),
                         booking.getCustomer().getLicenseNo(),
                         booking.getCustomer().getLicenseExpiryDate(),
                         booking.getCustomer().getPhone(),

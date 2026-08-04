@@ -9,8 +9,9 @@ public class UserMapper {
         /* This utility class should not be instantiated */
     }
 
-    public static User convertDtoToEntity(String email, String password, Role role){
+    public static User convertDtoToEntity(String name, String email, String password, Role role){
         User user = new User();
+        user.setName(name);
         user.setEmail(email);
         user.setPassword(password);
         user.setRole(role);

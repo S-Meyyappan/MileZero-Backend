@@ -22,9 +22,6 @@ public class Customer {
     private long id;
 
     @Column(nullable = false)
-    private String name;
-
-    @Column(nullable = false)
     private String phone;
 
     @Column(nullable = false)

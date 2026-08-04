@@ -21,9 +21,6 @@ public class Employee {
     private long id;
 
     @Column(nullable = false)
-    private String name;
-
-    @Column(nullable = false)
     private String phone;
 
     @OneToOne

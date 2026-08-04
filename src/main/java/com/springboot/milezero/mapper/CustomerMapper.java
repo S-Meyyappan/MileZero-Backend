@@ -12,7 +12,6 @@ public class CustomerMapper {
 
     public static Customer convertDtoToEntity(CustomerReqDto dto){
         Customer customer = new Customer();
-        customer.setName(dto.name());
         customer.setPhone(dto.phone());
         customer.setLicenseNo(dto.licenseNo());
         customer.setLicenseExpiryDate(dto.licenseExpiryDate());
@@ -23,7 +22,7 @@ public class CustomerMapper {
     public static CustomerRespDto convertEntityToDto(Customer customer){
         return new CustomerRespDto(
                 customer.getId(),
-                customer.getName(),
+                customer.getUser().getName(),
                 customer.getLicenseNo(),
                 customer.getLicenseExpiryDate(),
                 customer.getPhone(),

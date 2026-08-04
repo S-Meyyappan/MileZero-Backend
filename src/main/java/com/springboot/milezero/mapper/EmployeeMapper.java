@@ -12,7 +12,6 @@ public class EmployeeMapper {
 
     public static Employee convertDtoToEntity(EmployeeReqDto dto){
         Employee employee = new Employee();
-        employee.setName(dto.name());
         employee.setPhone(dto.phone());
         return employee;
     }
@@ -20,7 +19,7 @@ public class EmployeeMapper {
     public static EmployeeRespDto convertEntityToDto(Employee employee){
         return new EmployeeRespDto(
                 employee.getId(),
-                employee.getName(),
+                employee.getUser().getName(),
                 employee.getPhone(),
                 employee.getUser().getRole(),
                 employee.getBranch().getId(),
