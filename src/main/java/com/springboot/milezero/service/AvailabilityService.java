@@ -10,7 +10,7 @@ import com.springboot.milezero.mapper.VehicleMapper;
 import com.springboot.milezero.model.Vehicle;
 import com.springboot.milezero.repository.BranchRepository;
 import com.springboot.milezero.repository.VehicleRepository;
-import com.springboot.milezero.utility.VehicleFilterSpecification;
+import com.springboot.milezero.utility.AvailableVehicleFilterSpecification;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -103,7 +103,7 @@ public class AvailabilityService {
         Pageable pageable = PageRequest.of(page, size, sort);
 
         // . Create Specification
-        Specification<Vehicle> spec = VehicleFilterSpecification.getAvailableFleet(
+        Specification<Vehicle> spec = AvailableVehicleFilterSpecification.getAvailableFleet(
                 branchAvailabliltyReqDto.chosenPickup(),
                 branchAvailabliltyReqDto.chosenReturn(),
                 branchAvailabliltyReqDto.branchId(),
