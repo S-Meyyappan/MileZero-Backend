@@ -14,6 +14,7 @@ public record BookingRespDto(
         BookingStatus bookingStatus,
         BigDecimal estimatedCost,
         BigDecimal finalCost,
+        BigDecimal duration,
         int includedKm,
         Instant plannedPickup,
         Instant plannedReturn,

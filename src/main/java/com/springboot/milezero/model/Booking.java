@@ -42,6 +42,9 @@ public class Booking {
     @Column(nullable = true)
     private BigDecimal finalCost; // Added during return
 
+    @Column(nullable = false)
+    private BigDecimal duration;
+
     @Enumerated(EnumType.STRING)
     private BookingStatus bookingStatus;
 

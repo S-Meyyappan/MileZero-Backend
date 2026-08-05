@@ -16,6 +16,8 @@ import com.springboot.milezero.utility.DurationCalcUtil;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -29,6 +31,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class BookingService {
 
+    private static final Logger log = LoggerFactory.getLogger(BookingService.class);
     private final BookingRepository bookingRepository;
     private final BookingAddonRepository bookingAddonRepository;
     private final BranchRepository branchRepository;
@@ -82,6 +85,7 @@ public class BookingService {
                         ? category.getBasePricePerHour()
                         : category.getBasePricePerDay()
         );
+        booking.setDuration(quote.duration());
         booking.setEstimatedCost(quote.totalEstimateCost());
         booking.setIncludedKm(quote.totalIncludedKm());
 
@@ -138,7 +142,8 @@ public class BookingService {
                 basePrice.setScale(2, RoundingMode.HALF_UP),
                 addonPrice.setScale(2, RoundingMode.HALF_UP),
                 estimatedPrice.setScale(2, RoundingMode.HALF_UP),
-                totalKm
+                totalKm,
+                bookingReqDto.bookingType().equals(BookingType.HOURLY) ? hours : days
         );
     }
 

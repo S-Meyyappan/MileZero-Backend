@@ -35,6 +35,7 @@ public class BookingMapper {
                 booking.getBookingStatus(),
                 booking.getEstimatedCost(),
                 booking.getFinalCost(),
+                booking.getDuration(),
                 booking.getIncludedKm(),
                 booking.getPlannedPickup(),
                 booking.getPlannedReturn(),

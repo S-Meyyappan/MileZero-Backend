@@ -6,6 +6,7 @@ public record BookingQuoteRespDto(
         BigDecimal baseCost,
         BigDecimal addonCost,
         BigDecimal totalEstimateCost,
-        Integer totalIncludedKm
+        Integer totalIncludedKm,
+        BigDecimal duration
 ) {
 }
