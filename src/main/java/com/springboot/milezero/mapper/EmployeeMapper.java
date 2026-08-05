@@ -24,7 +24,7 @@ public class EmployeeMapper {
                 employee.getUser().getRole(),
                 employee.getBranch().getId(),
                 employee.getBranch().getName(),
-                employee.getBranch().getAddress()
+                employee.getBranch().getCity()
         );
     }
 }

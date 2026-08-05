@@ -9,6 +9,6 @@ public record EmployeeRespDto(
         Role role,
         Long branchId,
         String branchName,
-        String address
+        String city
 ) {
 }
