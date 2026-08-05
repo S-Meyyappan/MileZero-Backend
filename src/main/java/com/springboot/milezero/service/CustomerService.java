@@ -60,6 +60,13 @@ public class CustomerService {
                 .toList();
     }
 
+    public CustomerRespDto getCustomerByEmail(String email) {
+        Customer customer = customerRepository.fetchByEmail(email)
+                .orElseThrow(() -> new ResourceNotFoundException("Customer Email Invalid"));
+
+        return CustomerMapper.convertEntityToDto(customer);
+    }
+
     /*
     public void update(@Valid CustomerReqDto dto, long id) {
         Customer customer = customerRepository.findById(id)

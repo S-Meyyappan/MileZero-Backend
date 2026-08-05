@@ -7,11 +7,13 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/customer")
+@CrossOrigin("http://localhost:5173")
 public class CustomerController {
 
     private final CustomerService customerService;
@@ -49,4 +51,10 @@ public class CustomerController {
         customerService.update(customerreqDto, id);
     }
      */
+
+    @GetMapping("/get/me")
+    public CustomerRespDto getCustomer(Principal principal){
+        String email = principal.getName();
+        return customerService.getCustomerByEmail(email);
+    }
 }
