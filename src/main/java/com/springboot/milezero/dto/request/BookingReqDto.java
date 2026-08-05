@@ -17,7 +17,6 @@ public record BookingReqDto(
         @PositiveOrZero(message = "Included kilometers can't be negative")
         int requestedKm,
 
-        @NotNull(message = "Customer ID can't be empty")
         Long customerId,
 
         @NotNull(message = "Vehicle ID can't be empty")

@@ -18,10 +18,10 @@ public record BookingRespDto(
         int includedKm,
         Instant plannedPickup,
         Instant plannedReturn,
-        CategoryRespDto category,
         CustomerRespDto customer,
         BranchRespDto pickupBranch,
         BranchRespDto returnBranch,
+        VehicleDto vehicle,
         List<BookingAddonRespDto> bookingAddons
 ) {
 }

@@ -1,5 +1,6 @@
 package com.springboot.milezero.config;
 
+import com.springboot.milezero.enums.Role;
 import com.springboot.milezero.service.MyUserSecurityService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -34,6 +35,14 @@ public class SecurityConfig {
 
                         .requestMatchers("/api/vehicle/get-all").permitAll()
                         .requestMatchers("/api/employee/add").permitAll()
+
+                        // Customer API
+                        .requestMatchers("/api/booking/add/me").hasAuthority(Role.CUSTOMER.name())
+                        .requestMatchers("/api/booking/get-by-customer/me").hasAuthority(Role.CUSTOMER.name())
+                        .requestMatchers("/api/customer/get/me").hasAuthority(Role.CUSTOMER.name())
+
+                        //Employee API
+                        .requestMatchers("/api/booking/get-by-branch/me").hasAnyAuthority(Role.EMPLOYEE.name(), Role.MANAGER.name())
                         .anyRequest().permitAll()
 
                 )
