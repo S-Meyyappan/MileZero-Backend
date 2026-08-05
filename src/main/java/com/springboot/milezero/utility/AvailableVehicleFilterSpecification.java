@@ -94,6 +94,11 @@ public class AvailableVehicleFilterSpecification {
                     predicates.add(cb.equal(cb.lower(vehicleRoot.get("category").get("name")), lowerCaseCategory));
                 }
 
+                // 2.7 Filter by branch
+                if (branchId != null) {
+                    predicates.add(cb.equal(vehicleRoot.get("branch").get("id"), branchId));
+                }
+
 
                 // 3. Return the combined predicate
                 return cb.and(predicates.toArray(new Predicate[0]));
