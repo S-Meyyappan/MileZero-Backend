@@ -8,6 +8,7 @@ import com.springboot.milezero.dto.util.AddonDtoUtil;
 import com.springboot.milezero.enums.BookingStatus;
 import com.springboot.milezero.enums.BookingType;
 import com.springboot.milezero.enums.FilterSort;
+import com.springboot.milezero.exception.InvalidReqException;
 import com.springboot.milezero.exception.ResourceNotFoundException;
 import com.springboot.milezero.mapper.BookingAddonMapper;
 import com.springboot.milezero.mapper.BookingMapper;
@@ -30,6 +31,7 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.Duration;
+import java.time.Instant;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -350,5 +352,38 @@ public class BookingService {
                                 bookingAddonMap.getOrDefault(b.getId(), List.of()) // If no booking addons exist of this booking, return empty list
                         ));
 
+    }
+
+    public void cancelBooking(long id) {
+        Booking booking = bookingRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Booking not found"));
+
+        Instant cancelDate = Instant.now();
+
+        Duration duration = Duration.between(cancelDate, booking.getPlannedPickup());
+
+        if(duration.toHours() < 48) {
+            throw new InvalidReqException("Cannot cancel your pickup is more or less than a day");
+        }
+
+        booking.setBookingStatus(BookingStatus.CANCELLED);
+        bookingRepository.save(booking);
+    }
+
+    public void changeBookingStatus(long id) {
+        Booking booking = bookingRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Booking not found"));
+
+        Instant markDate = Instant.now();
+
+        Duration duration = Duration.between(markDate, booking.getPlannedPickup());
+
+        if(markDate.isBefore(booking.getPlannedPickup())) {
+            throw new InvalidReqException("Cannot mark booking as no show before pickup");
+        }
+
+        booking.setBookingStatus(BookingStatus.NO_SHOW);
+
+        bookingRepository.save(booking);
     }
 }

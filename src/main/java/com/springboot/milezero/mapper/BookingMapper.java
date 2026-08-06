@@ -42,7 +42,8 @@ public class BookingMapper {
                         booking.getCustomer().getLicenseNo(),
                         booking.getCustomer().getLicenseExpiryDate(),
                         booking.getCustomer().getPhone(),
-                        booking.getCustomer().getInsurancePolicyNo()),
+                        booking.getCustomer().getInsurancePolicyNo(),
+                        booking.getCustomer().getLicensePhoto()),
                 new BranchRespDto(
                         booking.getPickupBranch().getId(),
                         booking.getPickupBranch().getName(),

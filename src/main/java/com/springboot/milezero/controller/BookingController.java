@@ -13,6 +13,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.time.Instant;
 import java.util.List;
 
 @RestController
@@ -79,6 +80,16 @@ public class BookingController {
                                               @RequestParam(required = false, defaultValue = "DEFAULT") FilterSort filterSort){
         String email = principal.getName();
         return bookingService.getByBranchLoggedInEmp(email, search, bookingType, bookingStatus, category, page, size, filterSort);
+    }
+
+    @PutMapping("/cancel/{id}")
+    public void cancelBooking(@PathVariable long id) {
+        bookingService.cancelBooking(id);
+    }
+
+    @PutMapping("/change-status/no-show/{id}")
+    public void changeBookingStatusNoShow (@PathVariable long id) {
+        bookingService.changeBookingStatus(id);
     }
 
 }
