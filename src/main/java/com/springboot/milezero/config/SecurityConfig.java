@@ -45,7 +45,9 @@ public class SecurityConfig {
 
                         //Employee API
                         .requestMatchers("/api/booking/get-by-branch/me").hasAnyAuthority(Role.EMPLOYEE.name(), Role.MANAGER.name())
+                        .requestMatchers("/api/vehicle/get-by-branch/me").hasAnyAuthority(Role.EMPLOYEE.name(), Role.MANAGER.name())
                         .requestMatchers("/api/booking/change-status/no-show/{id}").hasAnyAuthority(Role.EMPLOYEE.name(), Role.MANAGER.name())
+                        .requestMatchers("/api/pickuplog/add").hasAnyAuthority(Role.EMPLOYEE.name(), Role.MANAGER.name())
                         .anyRequest().permitAll()
 
                 )

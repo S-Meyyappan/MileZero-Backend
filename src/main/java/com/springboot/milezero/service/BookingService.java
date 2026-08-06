@@ -9,6 +9,7 @@ import com.springboot.milezero.enums.BookingStatus;
 import com.springboot.milezero.enums.BookingType;
 import com.springboot.milezero.enums.FilterSort;
 import com.springboot.milezero.exception.InvalidReqException;
+import com.springboot.milezero.exception.ResourceAlreadyExistsException;
 import com.springboot.milezero.exception.ResourceNotFoundException;
 import com.springboot.milezero.mapper.BookingAddonMapper;
 import com.springboot.milezero.mapper.BookingMapper;
@@ -34,6 +35,7 @@ import java.time.Duration;
 import java.time.Instant;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -49,6 +51,7 @@ public class BookingService {
     private final AddonRepository addonRepository;
     private final VehicleRepository vehicleRepository;
     private final EmployeeRepository employeeRepository;
+    private final PickuplogRepository pickuplogRepository;
 
     private final BookingPricingUtil bookingPricingUtil;
 
@@ -321,7 +324,7 @@ public class BookingService {
     }
 
     public Page<BookingRespDto> getByBranchLoggedInEmp(String email, String search, BookingType bookingType, BookingStatus bookingStatus, String category, Instant startDate, Instant endDate, int page, int size, FilterSort filterSort) {
-        Employee employee = employeeRepository.findByEmail(email)
+        Employee employee = employeeRepository.fetchByEmail(email)
                 .orElseThrow(() -> new ResourceNotFoundException("Employee not found"));
 
         Pageable pageable = BookingPageableUtil.getPageable(page, size, filterSort);
@@ -390,5 +393,20 @@ public class BookingService {
         booking.setBookingStatus(BookingStatus.NO_SHOW);
 
         bookingRepository.save(booking);
+    }
+
+    public BookingRespDto getWithCheckPickuplog(long id) {
+        Booking booking = bookingRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Booking Id Invalid"));
+
+        Optional<Pickuplog> pickuplog = pickuplogRepository.findByBookingId(booking.getId());
+
+        if(pickuplog.isPresent()){
+            throw new ResourceAlreadyExistsException("Pickuplog already exists for this booking");
+        }
+
+        List<BookingAddon> bookingAddonList = bookingAddonRepository.findAllByBooking(booking.getId());
+
+        return BookingMapper.convertEntityToDto(booking, bookingAddonList);
     }
 }

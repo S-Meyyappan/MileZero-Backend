@@ -23,7 +23,7 @@ public class UploadUtility {
             String fileExtension = fileName.split("\\.")[1];
 
             if (!allowedExtensions.contains(fileExtension)) {
-                throw new FileUploadException("Invalid file type. Only JPG, JPEG, and PDF files are allowed");
+                throw new FileUploadException("Invalid file type. Only JPG, JPEG files are allowed");
             }
         }
     }
@@ -46,5 +46,9 @@ public class UploadUtility {
         }
 
         return fileName;
+    }
+
+    public static void validateMultipleFiles(List<MultipartFile> files) {
+            files.forEach(UploadUtility::validateImage);
     }
 }

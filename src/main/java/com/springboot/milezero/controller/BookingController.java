@@ -96,4 +96,9 @@ public class BookingController {
         bookingService.changeBookingStatus(id);
     }
 
+    @GetMapping("/get/check-pickuplog/{id}")
+    public BookingRespDto getWithCheckPickuplog(@PathVariable long id){
+        return bookingService.getWithCheckPickuplog(id);
+    }
+
 }
