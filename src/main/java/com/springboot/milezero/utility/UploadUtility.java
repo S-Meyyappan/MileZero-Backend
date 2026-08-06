@@ -14,18 +14,17 @@ import java.util.Objects;
 public class UploadUtility {
 
     public static void validateImage(MultipartFile imageFile) {
-        if (imageFile == null || imageFile.isEmpty()) {
-            throw new FileUploadException("Image file is required");
-        }
+        if (imageFile != null && !imageFile.isEmpty()) {
 
-        List<String> allowedExtensions = List.of("jpg", "jpeg", "pdf");
+            List<String> allowedExtensions = List.of("jpg", "jpeg", "pdf");
 
-        String fileName = imageFile.getOriginalFilename();
+            String fileName = Objects.requireNonNull(imageFile.getOriginalFilename());
 
-        String fileExtension = fileName.split("\\.")[1];
+            String fileExtension = fileName.split("\\.")[1];
 
-        if (!allowedExtensions.contains(fileExtension)) {
-            throw new FileUploadException("Invalid file type. Only JPG, JPEG, and PDF files are allowed");
+            if (!allowedExtensions.contains(fileExtension)) {
+                throw new FileUploadException("Invalid file type. Only JPG, JPEG, and PDF files are allowed");
+            }
         }
     }
 

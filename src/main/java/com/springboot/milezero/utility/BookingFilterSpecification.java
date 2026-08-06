@@ -9,6 +9,7 @@ import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
 import org.springframework.data.jpa.domain.Specification;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,7 +18,9 @@ public class BookingFilterSpecification {
     public static Specification<Booking> getFilterSpecification(String search,
                                                                 BookingType bookingType,
                                                                 BookingStatus bookingStatus,
-                                                                String category
+                                                                String category,
+                                                                Instant startDate,
+                                                                Instant endDate
                                                                 ) {
         return new Specification<Booking>() {
             @Override
@@ -56,6 +59,15 @@ public class BookingFilterSpecification {
 
                     // Add the combined OR block to your main list of predicates
                     predicates.add(searchPredicate);
+                }
+
+                // 5. Date Range
+                if (startDate != null && endDate != null) {
+                    Predicate dateRange =  cb.or(
+                            cb.between(bookingRoot.get("plannedPickup"), startDate, endDate),
+                            cb.between(bookingRoot.get("plannedReturn"), startDate, endDate));
+
+                    predicates.add(dateRange);
                 }
 
                 return cb.and(predicates.toArray(new Predicate[0]));

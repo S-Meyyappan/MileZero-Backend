@@ -55,11 +55,13 @@ public class BookingController {
                                               @RequestParam(required = false) BookingType bookingType,
                                               @RequestParam(required = false) BookingStatus bookingStatus,
                                               @RequestParam(required = false) String category,
+                                              @RequestParam(required = false) Instant startDate,
+                                              @RequestParam(required = false) Instant endDate,
                                               @RequestParam(required = false, defaultValue = "0") int page,
                                               @RequestParam(required = false, defaultValue = "8") int size,
                                               @RequestParam(required = false, defaultValue = "DEFAULT") FilterSort filterSort){
         String email = principal.getName();
-        return bookingService.getByCustomer(email, search, bookingType, bookingStatus, category, page, size, filterSort);
+        return bookingService.getByCustomer(email, search, bookingType, bookingStatus, category, startDate, endDate, page, size, filterSort);
     }
 
     @PostMapping("/add/me")
@@ -75,11 +77,13 @@ public class BookingController {
                                               @RequestParam(required = false) BookingType bookingType,
                                               @RequestParam(required = false) BookingStatus bookingStatus,
                                               @RequestParam(required = false) String category,
+                                              @RequestParam(required = false) Instant startDate,
+                                              @RequestParam(required = false) Instant endDate,
                                               @RequestParam(required = false, defaultValue = "0") int page,
                                               @RequestParam(required = false, defaultValue = "8") int size,
                                               @RequestParam(required = false, defaultValue = "DEFAULT") FilterSort filterSort){
         String email = principal.getName();
-        return bookingService.getByBranchLoggedInEmp(email, search, bookingType, bookingStatus, category, page, size, filterSort);
+        return bookingService.getByBranchLoggedInEmp(email, search, bookingType, bookingStatus, category, startDate, endDate, page, size, filterSort);
     }
 
     @PutMapping("/cancel/{id}")

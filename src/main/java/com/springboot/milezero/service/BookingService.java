@@ -216,7 +216,7 @@ public class BookingService {
                 .toList();
     }
 
-    public Page<BookingRespDto> getByCustomer(String email, String search, BookingType bookingType, BookingStatus bookingStatus, String category, int page, int size, FilterSort filterSort) {
+    public Page<BookingRespDto> getByCustomer(String email, String search, BookingType bookingType, BookingStatus bookingStatus, String category, Instant startDate, Instant endDate, int page, int size, FilterSort filterSort) {
 
         Pageable pageable = BookingPageableUtil.getPageable(page, size, filterSort);
 
@@ -225,7 +225,9 @@ public class BookingService {
                                                 search,
                                                 bookingType,
                                                 bookingStatus,
-                                                category
+                                                category,
+                                                startDate,
+                                                endDate
                                         ));
 
         Page<Booking> list = bookingRepository.findAll(spec, pageable);
@@ -318,7 +320,7 @@ public class BookingService {
         return BookingMapper.convertEntityToDto(savedBooking, bookingAddonList);
     }
 
-    public Page<BookingRespDto> getByBranchLoggedInEmp(String email, String search, BookingType bookingType, BookingStatus bookingStatus, String category, int page, int size, FilterSort filterSort) {
+    public Page<BookingRespDto> getByBranchLoggedInEmp(String email, String search, BookingType bookingType, BookingStatus bookingStatus, String category, Instant startDate, Instant endDate, int page, int size, FilterSort filterSort) {
         Employee employee = employeeRepository.findByEmail(email)
                 .orElseThrow(() -> new ResourceNotFoundException("Employee not found"));
 
@@ -329,7 +331,10 @@ public class BookingService {
                                                 search,
                                                 bookingType,
                                                 bookingStatus,
-                                                category));
+                                                category,
+                                                startDate,
+                                                endDate
+                                        ));
 
         Page<Booking> list = bookingRepository.findAll(spec, pageable);
 

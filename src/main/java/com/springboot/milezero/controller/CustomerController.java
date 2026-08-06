@@ -67,7 +67,7 @@ public class CustomerController {
                                @RequestParam String licenseNo,
                                @RequestParam LocalDate licenseExpiryDate,
                                @RequestParam String insurancePolicyNo,
-                               @RequestParam MultipartFile imageFile){
+                               @RequestParam(required = false) MultipartFile imageFile){
         String email = principal.getName();
         customerService.updateCustomer(email, name, phone, licenseNo, licenseExpiryDate, insurancePolicyNo, imageFile);
     }

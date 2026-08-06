@@ -77,17 +77,18 @@ public class CustomerService {
         Customer customer = customerRepository.fetchByEmail(email)
                 .orElseThrow(() -> new ResourceNotFoundException("Customer Invalid"));
 
+        customer.getUser().setName(name);
+        customer.setPhone(phone);
+        customer.setLicenseNo(licenseNo);
+        customer.setLicenseExpiryDate(licenseExpiryDate);
+        customer.setInsurancePolicyNo(insurancePolicyNo);
+
         // Validate image
         UploadUtility.validateImage(imageFile);
 
         // Upload image
         String imageUrl = UploadUtility.saveImage(imageFile, UPLOAD_DIR);
 
-        customer.getUser().setName(name);
-        customer.setPhone(phone);
-        customer.setLicenseNo(licenseNo);
-        customer.setLicenseExpiryDate(licenseExpiryDate);
-        customer.setInsurancePolicyNo(insurancePolicyNo);
         customer.setLicensePhoto(imageUrl);
 
         customerRepository.save(customer);
