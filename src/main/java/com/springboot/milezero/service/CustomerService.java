@@ -10,10 +10,14 @@ import com.springboot.milezero.model.Customer;
 import com.springboot.milezero.model.User;
 import com.springboot.milezero.repository.CustomerRepository;
 import com.springboot.milezero.repository.UserRepository;
+import com.springboot.milezero.utility.UploadUtility;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -23,6 +27,8 @@ public class CustomerService {
     private final CustomerRepository customerRepository;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+
+    private static final String UPLOAD_DIR = "D:/MileZero/MileZero-Frontend/public/customer";
 
     public CustomerRespDto add(CustomerReqDto customerReqDto) {
         // 1. Get user from mapper
@@ -65,6 +71,26 @@ public class CustomerService {
                 .orElseThrow(() -> new ResourceNotFoundException("Customer Email Invalid"));
 
         return CustomerMapper.convertEntityToDto(customer);
+    }
+
+    public void updateCustomer(String email, @Valid String name, @Valid String phone, @Valid String licenseNo, @Valid LocalDate licenseExpiryDate, @Valid String insurancePolicyNo, MultipartFile imageFile) {
+        Customer customer = customerRepository.fetchByEmail(email)
+                .orElseThrow(() -> new ResourceNotFoundException("Customer Invalid"));
+
+        // Validate image
+        UploadUtility.validateImage(imageFile);
+
+        // Upload image
+        String imageUrl = UploadUtility.saveImage(imageFile, UPLOAD_DIR);
+
+        customer.getUser().setName(name);
+        customer.setPhone(phone);
+        customer.setLicenseNo(licenseNo);
+        customer.setLicenseExpiryDate(licenseExpiryDate);
+        customer.setInsurancePolicyNo(insurancePolicyNo);
+        customer.setLicensePhoto(imageUrl);
+
+        customerRepository.save(customer);
     }
 
     /*

@@ -6,8 +6,10 @@ import com.springboot.milezero.service.CustomerService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.security.Principal;
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -56,5 +58,17 @@ public class CustomerController {
     public CustomerRespDto getCustomer(Principal principal){
         String email = principal.getName();
         return customerService.getCustomerByEmail(email);
+    }
+
+    @PutMapping("/update/me")
+    public void updateCustomer(Principal principal,
+                               @RequestParam String name,
+                               @RequestParam String phone,
+                               @RequestParam String licenseNo,
+                               @RequestParam LocalDate licenseExpiryDate,
+                               @RequestParam String insurancePolicyNo,
+                               @RequestParam MultipartFile imageFile){
+        String email = principal.getName();
+        customerService.updateCustomer(email, name, phone, licenseNo, licenseExpiryDate, insurancePolicyNo, imageFile);
     }
 }

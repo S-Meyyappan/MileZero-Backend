@@ -1,6 +1,8 @@
 package com.springboot.milezero.config;
 
-import com.springboot.milezero.dto.response.ErrorResponseDto;
+import com.springboot.milezero.dto.response.ResponseDto;
+import com.springboot.milezero.exception.FileUploadException;
+import com.springboot.milezero.exception.InvalidReqException;
 import com.springboot.milezero.exception.ResourceAlreadyExistsException;
 import com.springboot.milezero.exception.ResourceNotFoundException;
 import org.springframework.http.ResponseEntity;
@@ -36,20 +38,38 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(ResourceNotFoundException.class)
-    public ResponseEntity<ErrorResponseDto> handleResourceNotFoundException(ResourceNotFoundException e) {
+    public ResponseEntity<ResponseDto> handleResourceNotFoundException(ResourceNotFoundException e) {
         return ResponseEntity
                 .badRequest()
                 .body(
-                        new ErrorResponseDto(e.getMessage())
+                        new ResponseDto(e.getMessage())
                 );
     }
 
     @ExceptionHandler(ResourceAlreadyExistsException.class)
-    public ResponseEntity<ErrorResponseDto> handleResourceAlreadyExistsException(ResourceAlreadyExistsException e) {
+    public ResponseEntity<ResponseDto> handleResourceAlreadyExistsException(ResourceAlreadyExistsException e) {
         return ResponseEntity
                 .badRequest()
                 .body(
-                        new ErrorResponseDto(e.getMessage())
+                        new ResponseDto(e.getMessage())
+                );
+    }
+
+    @ExceptionHandler(InvalidReqException.class)
+    public ResponseEntity<ResponseDto> handleInvalidReqException(InvalidReqException e) {
+        return ResponseEntity
+                .badRequest()
+                .body(
+                        new ResponseDto(e.getMessage())
+                );
+    }
+
+    @ExceptionHandler(FileUploadException.class)
+    public ResponseEntity<ResponseDto> handleFileUploadException(FileUploadException e) {
+        return ResponseEntity
+                .badRequest()
+                .body(
+                        new ResponseDto(e.getMessage())
                 );
     }
 }

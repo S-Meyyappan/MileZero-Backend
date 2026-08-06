@@ -26,7 +26,8 @@ public class CustomerMapper {
                 customer.getLicenseNo(),
                 customer.getLicenseExpiryDate(),
                 customer.getPhone(),
-                customer.getInsurancePolicyNo()
+                customer.getInsurancePolicyNo(),
+                customer.getLicensePhoto()
         );
     }
 }

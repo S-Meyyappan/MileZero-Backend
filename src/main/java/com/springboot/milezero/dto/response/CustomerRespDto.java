@@ -8,6 +8,7 @@ public record CustomerRespDto(
         String licenseNo,
         LocalDate licenseExpiryDate,
         String phone,
-        String insurancePolicyNo
+        String insurancePolicyNo,
+        String licensePhoto
 ) {
 }
