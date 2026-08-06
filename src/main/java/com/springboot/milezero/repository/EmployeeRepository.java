@@ -27,5 +27,5 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
     @Query("""
             SELECT e FROM Employee e WHERE e.user.email = :email AND e.user.isActive = true
             """)
-    Optional<Employee> findByEmail(String email);
+    Optional<Employee> fetchByEmail(String email);
 }

@@ -8,6 +8,8 @@ public record VehicleDto(
         Long id,
         String manufacturer,
         String model,
+        String registrationNo,
+        Long odometer,
         Integer manufacturingYear,
         FuelType fuelType,
         Transmission transmission,

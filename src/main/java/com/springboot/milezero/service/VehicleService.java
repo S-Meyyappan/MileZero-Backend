@@ -10,13 +10,12 @@ import com.springboot.milezero.mapper.VehicleFeatureMapper;
 import com.springboot.milezero.mapper.VehicleMapper;
 import com.springboot.milezero.model.*;
 import com.springboot.milezero.repository.*;
+import com.springboot.milezero.utility.PageableVehicleUtil;
 import com.springboot.milezero.utility.VehicleFilterSpecification;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
@@ -34,6 +33,7 @@ public class VehicleService {
     private final BranchRepository branchRepository;
     private final FeatureRepository featureRepository;
     private final VehicleFeatureRepository vehicleFeatureRepository;
+    private final EmployeeRepository employeeRepository;
 
     public VehicleRespDto add(VehicleReqDto vehicleReqDto) {
         Category category = categoryRepository.findById(vehicleReqDto.categoryId())
@@ -102,8 +102,17 @@ public class VehicleService {
     }
 
 
-    public List<VehicleRespDto> getAllByBranch(long id) {
-        List<Vehicle> vehicles = vehicleRepository.getAllByBranch(id);
+    public Page<VehicleRespDto> getAllByBranch(String email, String search, String brand, String fuelType, String transmission, Integer seats, String category, int page, int size, FilterSort filterSort) {
+        Employee employee = employeeRepository.fetchByEmail(email)
+                .orElseThrow(() -> new ResourceNotFoundException("Employee Invalid"));
+
+        Pageable pageable = PageableVehicleUtil.getPageable(page, size, filterSort);
+
+        Specification<Vehicle> spec = VehicleFilterSpecification.getFilteredVehicles(
+                                        employee.getBranch().getId(),
+                                        search, brand, fuelType, transmission, seats, category);
+
+        Page<Vehicle> vehicles = vehicleRepository.findAll(spec, pageable);
 
         List<Long> vehicleIds = vehicles.stream()
                 .map(Vehicle::getId)
@@ -117,9 +126,11 @@ public class VehicleService {
                         Collectors.mapping(VehicleFeature::getFeature, Collectors.toList())
                 ));
 
-        return vehicles.stream()
-                .map(v -> VehicleMapper.convertEntityToDto(v, map.get(v.getId())))
-                .toList();
+        return vehicles
+                .map(v ->
+                        VehicleMapper.convertEntityToDto(
+                                v,  map.get(v.getId())
+                        ));
     }
 
     public Page<VehicleRespDto> getAll(
@@ -134,18 +145,8 @@ public class VehicleService {
                                 int size,
                                 FilterSort filterSort) {
 
-        // 1. Declare Sort not sorted by default
-        Sort sort;
-
-        switch (filterSort){
-            case PRICE_LOW_TO_HIGH -> sort = Sort.by("category.basePricePerDay").ascending();
-            case PRICE_HIGH_TO_LOW -> sort = Sort.by("category.basePricePerDay").descending();
-            case YEAR_HIGH_TO_LOW ->  sort = Sort.by("manufacturingYear").descending();
-            default -> sort = Sort.unsorted();
-        }
-
-        // 3. Create pageable
-        Pageable pageable = PageRequest.of(page, size, sort);
+        // 1. Get Pageable
+        Pageable pageable = PageableVehicleUtil.getPageable(page, size, filterSort);
 
         // 4. Apply Specification Criteria API
         Specification<Vehicle> spec = VehicleFilterSpecification.getFilteredVehicles(

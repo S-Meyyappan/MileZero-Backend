@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 
 @RestController
@@ -34,9 +35,19 @@ public class VehicleController {
         return vehicleService.getAllByCategory(id);
     }
 
-    @GetMapping("/get-by-branch/{id}")
-    public List<VehicleRespDto> getByBranch(@PathVariable long id){
-        return vehicleService.getAllByBranch(id);
+    @GetMapping("/get-by-branch/me")
+    public Page<VehicleRespDto> getByBranch(Principal principal,
+                                            @RequestParam(required = false) String search,
+                                            @RequestParam(required = false) String brand,
+                                            @RequestParam(required = false) String fuelType,
+                                            @RequestParam(required = false) String transmission,
+                                            @RequestParam(required = false) Integer seats,
+                                            @RequestParam(required = false) String category,
+                                            @RequestParam(required = false, defaultValue = "0") int page,
+                                            @RequestParam(required = false, defaultValue = "8") int size,
+                                            @RequestParam(required = false, defaultValue = "DEFAULT") FilterSort filterSort){
+        String email = principal.getName();
+        return vehicleService.getAllByBranch(email, search, brand, fuelType, transmission, seats, category, page, size, filterSort);
     }
 
     @GetMapping("/get-all")

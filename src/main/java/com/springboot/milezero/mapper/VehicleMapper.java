@@ -55,6 +55,8 @@ public class VehicleMapper {
                 vehicle.getId(),
                 vehicle.getManufacturer(),
                 vehicle.getModel(),
+                vehicle.getRegistrationNo(),
+                vehicle.getCurrentOdometer(),
                 vehicle.getManufacturingYear(),
                 vehicle.getFuelType(),
                 vehicle.getTransmission(),

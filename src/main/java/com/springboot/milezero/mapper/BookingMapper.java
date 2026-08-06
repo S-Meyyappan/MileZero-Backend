@@ -60,6 +60,8 @@ public class BookingMapper {
                         booking.getVehicle().getId(),
                         booking.getVehicle().getManufacturer(),
                         booking.getVehicle().getModel(),
+                        booking.getVehicle().getRegistrationNo(),
+                        booking.getVehicle().getCurrentOdometer(),
                         booking.getVehicle().getManufacturingYear(),
                         booking.getVehicle().getFuelType(),
                         booking.getVehicle().getTransmission(),
