@@ -4,6 +4,8 @@ import com.springboot.milezero.dto.request.BookingAddonDto;
 import com.springboot.milezero.model.Category;
 import com.springboot.milezero.service.AddonService;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
@@ -13,17 +15,24 @@ import java.util.List;
 @RequiredArgsConstructor
 public class BookingPricingUtil {
 
+    private static final Logger log = LoggerFactory.getLogger(BookingPricingUtil.class);
     private final AddonService addonService;
 
     public BigDecimal calculateBasePriceForHourly(Category category, int requestedKm, BigDecimal hours) {
         BigDecimal hoursFee = category.getBasePricePerHour().multiply(hours);
         BigDecimal kmFee = calculateKmPrice(category, requestedKm);
+        log.info("Hours Fee: {}", hoursFee);
+        log.info("Km Fee: {}", kmFee);
+        log.info("Total Fee: {}", hoursFee.add(kmFee));
         return hoursFee.add(kmFee);
     }
 
     public BigDecimal calculateBasePriceForDaily(Category category, int requestedKm, BigDecimal days) {
         BigDecimal daysFee = category.getBasePricePerDay().multiply(days);
         BigDecimal kmFee = calculateKmPrice(category, requestedKm);
+        log.info("Days Fee: {}", daysFee);
+        log.info("Km Fee: {}", kmFee);
+        log.info("Total Fee: {}", daysFee.add(kmFee));
         return daysFee.add(kmFee);
     }
 

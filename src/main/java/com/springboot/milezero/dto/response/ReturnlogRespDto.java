@@ -6,13 +6,14 @@ import java.math.BigDecimal;
 import java.time.Instant;
 
 
-public record ReturnlogRespDto(
+public record  ReturnlogRespDto(
         Long id,
         Instant actualReturn,
         Long odometer,
         FuelLevel fuelLevel,
         BigDecimal extraCharges,
         String remarks,
+        BookingRespDto booking,
         String employeeName
 ) {
 }
