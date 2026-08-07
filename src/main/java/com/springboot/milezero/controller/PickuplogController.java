@@ -23,11 +23,10 @@ public class PickuplogController {
                                 @RequestParam("odometer") long odometer,
                                 @RequestParam("fuelLevel") FuelLevel fuelLevel,
                                 @RequestParam(required = false, defaultValue = "") String remarks,
-                                @RequestParam("vehicleId") long vehicleId,
                                 @RequestParam("bookingId") long bookingId,
                                 @RequestParam(value = "files", required = false) List<MultipartFile> imageFiles ) {
         String email = principal.getName();
-        return pickuplogService.add(email, odometer, fuelLevel, remarks, vehicleId, bookingId, imageFiles);
+        return pickuplogService.add(email, odometer, fuelLevel, remarks, bookingId, imageFiles);
     }
 
     @GetMapping("/get-by/booking/{id}")

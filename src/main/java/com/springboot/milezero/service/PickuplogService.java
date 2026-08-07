@@ -33,14 +33,14 @@ public class PickuplogService {
     private static final String UPLOAD_DIR = "D:/MileZero/MileZero-Frontend/public/pickup";
 
     @Transactional
-    public PickuplogRespDto add(String email, long odometer, FuelLevel fuelLevel, String remarks, long vehicleId, long bookingId, List<MultipartFile> imageFiles) {
+    public PickuplogRespDto add(String email, long odometer, FuelLevel fuelLevel, String remarks, long bookingId, List<MultipartFile> imageFiles) {
         // Step 1. Validate id (vehicle, booking, employee) if exist
         Booking booking = bookingRepository.findById(bookingId)
             .orElseThrow(() -> new ResourceNotFoundException("Booking Id Invalid"));
         Employee employee = employeeRepository.fetchByEmail(email)
             .orElseThrow(() -> new ResourceNotFoundException("Employee Invalid"));
-        Vehicle vehicle = vehicleRepository.findById(vehicleId)
-            .orElseThrow(() -> new ResourceNotFoundException("Vehicle Id Invalid"));
+        Vehicle vehicle = vehicleRepository.findById(booking.getVehicle().getId())
+            .orElseThrow(() -> new ResourceNotFoundException("Vehicle Invalid"));
 
         // Step 2. Update the vehicle being allocated and status into booking
         booking.setVehicle(vehicle);
