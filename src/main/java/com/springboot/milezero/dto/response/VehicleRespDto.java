@@ -1,10 +1,12 @@
 package com.springboot.milezero.dto.response;
 
+import com.springboot.milezero.enums.CurrentStatus;
 import com.springboot.milezero.enums.DriveType;
 import com.springboot.milezero.enums.FuelType;
 import com.springboot.milezero.enums.Transmission;
 import com.springboot.milezero.model.Feature;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public record VehicleRespDto(
@@ -12,6 +14,11 @@ public record VehicleRespDto(
         String manufacturer,
         String model,
         Integer manufacturingYear,
+        LocalDate purchaseDate,
+        String chassisNo,
+        String registrationNo,
+        String image,
+        CurrentStatus currentStatus,
         FuelType fuelType,
         Transmission transmission,
         DriveType driveType,

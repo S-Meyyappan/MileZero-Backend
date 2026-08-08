@@ -18,6 +18,7 @@ public class VehicleFilterSpecification {
                                                              String fuelType,
                                                              String transmission,
                                                              Integer seats,
+                                                             String currentStatus,
                                                              String category) {
         return new Specification<Vehicle>() {
             @Override
@@ -67,6 +68,11 @@ public class VehicleFilterSpecification {
                 // 2.7 Filter by branch
                 if (branchId != null) {
                     predicates.add(cb.equal(vehicleRoot.get("branch").get("id"), branchId));
+                }
+
+                // 2.8 Filter by current status
+                if (currentStatus != null && !currentStatus.trim().isEmpty()) {
+                    predicates.add(cb.equal(cb.lower(vehicleRoot.get("currentStatus")), currentStatus.toLowerCase()));
                 }
 
 

@@ -68,6 +68,8 @@ public class Vehicle {
     @Column(nullable = false)
     private Boolean withAc;
 
+    private String image;
+
     @ManyToOne
     @JoinColumn(name = "category_id", nullable = false)
     private Category category;

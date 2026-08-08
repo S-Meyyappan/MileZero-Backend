@@ -1,6 +1,7 @@
 package com.springboot.milezero.controller;
 
 import com.springboot.milezero.dto.request.VehicleReqDto;
+import com.springboot.milezero.dto.request.VehicleUpdateDto;
 import com.springboot.milezero.dto.response.VehicleRespDto;
 import com.springboot.milezero.enums.FilterSort;
 import com.springboot.milezero.service.VehicleService;
@@ -8,6 +9,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.security.Principal;
 import java.util.List;
@@ -43,11 +45,12 @@ public class VehicleController {
                                             @RequestParam(required = false) String transmission,
                                             @RequestParam(required = false) Integer seats,
                                             @RequestParam(required = false) String category,
+                                            @RequestParam(required = false) String currentStatus,
                                             @RequestParam(required = false, defaultValue = "0") int page,
                                             @RequestParam(required = false, defaultValue = "8") int size,
                                             @RequestParam(required = false, defaultValue = "DEFAULT") FilterSort filterSort){
         String email = principal.getName();
-        return vehicleService.getAllByBranch(email, search, brand, fuelType, transmission, seats, category, page, size, filterSort);
+        return vehicleService.getAllByBranch(email, search, brand, fuelType, transmission, seats, category, currentStatus, page, size, filterSort);
     }
 
     @GetMapping("/get-all")
@@ -59,17 +62,19 @@ public class VehicleController {
             @RequestParam(required = false) String transmission,
             @RequestParam(required = false) Integer seats,
             @RequestParam(required = false) String category,
+            @RequestParam(required = false) String currentStatus,
             @RequestParam(required = false, defaultValue = "0") int page,
             @RequestParam(required = false, defaultValue = "8") int size,
             @RequestParam(required = false, defaultValue = "DEFAULT") FilterSort filterSort){
 
-        return vehicleService.getAll(branchId, search, brand, fuelType, transmission, seats, category, page, size, filterSort);
+        return vehicleService.getAll(branchId, search, brand, fuelType, transmission, seats, category, currentStatus, page, size, filterSort);
     }
 
     @PutMapping("/update/{id}")
-    public VehicleRespDto update( @PathVariable long id,
-                        @Valid @RequestBody VehicleReqDto vehicleReqDto){
-        return vehicleService.update(vehicleReqDto, id);
+    public void update(@PathVariable Long id,
+                                 @RequestPart("vehicle") VehicleUpdateDto vehicle,
+                                 @RequestPart(value = "image", required = false) MultipartFile image){
+        vehicleService.update(id, vehicle, image);
     }
 
     @GetMapping("/get-all-brands")

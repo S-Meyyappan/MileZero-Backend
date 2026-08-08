@@ -1,6 +1,7 @@
 package com.springboot.milezero.service;
 
 import com.springboot.milezero.dto.request.VehicleReqDto;
+import com.springboot.milezero.dto.request.VehicleUpdateDto;
 import com.springboot.milezero.dto.response.VehicleRespDto;
 import com.springboot.milezero.enums.FilterSort;
 import com.springboot.milezero.enums.FuelType;
@@ -11,13 +12,17 @@ import com.springboot.milezero.mapper.VehicleMapper;
 import com.springboot.milezero.model.*;
 import com.springboot.milezero.repository.*;
 import com.springboot.milezero.utility.PageableVehicleUtil;
+import com.springboot.milezero.utility.UploadUtility;
 import com.springboot.milezero.utility.VehicleFilterSpecification;
-import jakarta.validation.Valid;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Arrays;
 import java.util.List;
@@ -28,12 +33,15 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class VehicleService {
 
+    private static final Logger log = LoggerFactory.getLogger(VehicleService.class);
     private final VehicleRepository vehicleRepository;
     private final CategoryRepository categoryRepository;
     private final BranchRepository branchRepository;
     private final FeatureRepository featureRepository;
     private final VehicleFeatureRepository vehicleFeatureRepository;
     private final EmployeeRepository employeeRepository;
+
+    private static final String UPLOAD_DIR = "D:/MileZero/MileZero-Frontend/public/vehicle";
 
     public VehicleRespDto add(VehicleReqDto vehicleReqDto) {
         Category category = categoryRepository.findById(vehicleReqDto.categoryId())
@@ -102,7 +110,7 @@ public class VehicleService {
     }
 
 
-    public Page<VehicleRespDto> getAllByBranch(String email, String search, String brand, String fuelType, String transmission, Integer seats, String category, int page, int size, FilterSort filterSort) {
+    public Page<VehicleRespDto> getAllByBranch(String email, String search, String brand, String fuelType, String transmission, Integer seats, String category, String currentStatus, int page, int size, FilterSort filterSort) {
         Employee employee = employeeRepository.fetchByEmail(email)
                 .orElseThrow(() -> new ResourceNotFoundException("Employee Invalid"));
 
@@ -110,7 +118,7 @@ public class VehicleService {
 
         Specification<Vehicle> spec = VehicleFilterSpecification.getFilteredVehicles(
                                         employee.getBranch().getId(),
-                                        search, brand, fuelType, transmission, seats, category);
+                                        search, brand, fuelType, transmission, seats, currentStatus, category);
 
         Page<Vehicle> vehicles = vehicleRepository.findAll(spec, pageable);
 
@@ -134,23 +142,23 @@ public class VehicleService {
     }
 
     public Page<VehicleRespDto> getAll(
-                                Long branchId,
-                                String search,
-                                String brand,
-                                String fuelType,
-                                String transmission,
-                                Integer seats,
-                                String category,
-                                int page,
-                                int size,
-                                FilterSort filterSort) {
+            Long branchId,
+            String search,
+            String brand,
+            String fuelType,
+            String transmission,
+            Integer seats,
+            String category,
+            String currentStatus, int page,
+            int size,
+            FilterSort filterSort) {
 
         // 1. Get Pageable
         Pageable pageable = PageableVehicleUtil.getPageable(page, size, filterSort);
 
         // 4. Apply Specification Criteria API
         Specification<Vehicle> spec = VehicleFilterSpecification.getFilteredVehicles(
-                branchId, search, brand, fuelType, transmission, seats, category);
+                branchId, search, brand, fuelType, transmission, seats, currentStatus, category);
 
         // 5. Get Pageable Vehicles
         Page<Vehicle> vehicles = vehicleRepository.findAll(spec, pageable);
@@ -174,9 +182,29 @@ public class VehicleService {
                         ));
     }
 
-    public VehicleRespDto update(@Valid VehicleReqDto dto, long id) {
+    @Transactional
+    public void update(long id, VehicleUpdateDto dto, MultipartFile image) {
+        // Validate Vehicle
         Vehicle vehicle = vehicleRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Vehicle Id Invalid"));
+        Category category = categoryRepository.findById(dto.categoryId())
+                .orElseThrow(() -> new ResourceNotFoundException("Category Id Invalid"));
+
+        // Validate Features
+        List<Feature> features = featureRepository.findAllById(dto.featureIds());
+        if(features.size() != dto.featureIds().size()){
+            throw new ResourceNotFoundException("Some features not found");
+        }
+
+        // Delete All Existing Features of Vehicle
+        featureRepository.deleteAllByVehicleId(id);
+
+        // Update Image
+        if(image != null) {
+            UploadUtility.validateImage(image);
+            String imageFileName = UploadUtility.saveImage(image, UPLOAD_DIR);
+            vehicle.setImage(imageFileName);
+        }
 
         vehicle.setRegistrationNo(dto.registrationNo());
         vehicle.setChassisNo(dto.chassisNo());
@@ -191,12 +219,17 @@ public class VehicleService {
         vehicle.setWithAc(dto.withAc());
         vehicle.setSeatCount(dto.seatCount());
         vehicle.setLuggageCapacity(dto.luggageCapacity());
+        vehicle.setCategory(category);
+        vehicle.setCurrentStatus(dto.currentStatus());
 
-        vehicle = vehicleRepository.save(vehicle);
+        Vehicle finalVehicle = vehicleRepository.save(vehicle);
 
-        List<Feature> featuresList = vehicleFeatureRepository.getAllFeatures(id);
+        // Update Features
+        List<VehicleFeature> vehicleFeatures = features.stream()
+                .map(f -> VehicleFeatureMapper.convertEntityToEntity(f,finalVehicle))
+                .toList();
 
-        return VehicleMapper.convertEntityToDto(vehicle, featuresList);
+        vehicleFeatureRepository.saveAll(vehicleFeatures);
     }
 
     public List<String> getAllBrands() {
