@@ -13,7 +13,6 @@ public record  ReturnlogRespDto(
         FuelLevel fuelLevel,
         BigDecimal extraCharges,
         String remarks,
-        BookingRespDto booking,
         String employeeName
 ) {
 }

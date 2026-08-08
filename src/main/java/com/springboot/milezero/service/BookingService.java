@@ -4,6 +4,7 @@ import com.springboot.milezero.dto.request.BookingAddonDto;
 import com.springboot.milezero.dto.request.BookingReqDto;
 import com.springboot.milezero.dto.response.BookingQuoteRespDto;
 import com.springboot.milezero.dto.response.BookingRespDto;
+import com.springboot.milezero.dto.response.BookingSummaryDto;
 import com.springboot.milezero.dto.util.AddonDtoUtil;
 import com.springboot.milezero.enums.BookingStatus;
 import com.springboot.milezero.enums.BookingType;
@@ -13,6 +14,7 @@ import com.springboot.milezero.exception.ResourceAlreadyExistsException;
 import com.springboot.milezero.exception.ResourceNotFoundException;
 import com.springboot.milezero.mapper.BookingAddonMapper;
 import com.springboot.milezero.mapper.BookingMapper;
+import com.springboot.milezero.mapper.BookingSummaryMapper;
 import com.springboot.milezero.model.*;
 import com.springboot.milezero.repository.*;
 import com.springboot.milezero.utility.BookingFilterSpecification;
@@ -52,6 +54,7 @@ public class BookingService {
     private final VehicleRepository vehicleRepository;
     private final EmployeeRepository employeeRepository;
     private final PickuplogRepository pickuplogRepository;
+    private final ReturnlogRepository returnlogRepository;
 
     private final BookingPricingUtil bookingPricingUtil;
 
@@ -408,5 +411,32 @@ public class BookingService {
         List<BookingAddon> bookingAddonList = bookingAddonRepository.findAllByBooking(booking.getId());
 
         return BookingMapper.convertEntityToDto(booking, bookingAddonList);
+    }
+
+    public BookingRespDto getWithCheckReturnlog(long id) {
+        Booking booking = bookingRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Booking Id Invalid"));
+
+        Optional<Returnlog> returnlog = returnlogRepository.findByBookingId(booking.getId());
+
+        if(returnlog.isPresent()){
+            throw new ResourceAlreadyExistsException("Returnlog already exists for this booking");
+        }
+
+        List<BookingAddon> bookingAddonList = bookingAddonRepository.findAllByBooking(booking.getId());
+
+        return BookingMapper.convertEntityToDto(booking, bookingAddonList);
+    }
+
+    public BookingSummaryDto getBookingSummary(long id) {
+        BookingRespDto booking = get(id);
+
+        Pickuplog pickuplog = pickuplogRepository.findByBookingId(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Pickuplog not found"));
+
+        Returnlog returnlog = returnlogRepository.findByBookingId(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Returnlog not found"));
+
+        return BookingSummaryMapper.convertEntityToDto(booking, pickuplog, returnlog);
     }
 }

@@ -1,6 +1,5 @@
 package com.springboot.milezero.mapper;
 
-import com.springboot.milezero.dto.response.BookingRespDto;
 import com.springboot.milezero.dto.response.ReturnlogRespDto;
 import com.springboot.milezero.enums.FuelLevel;
 import com.springboot.milezero.model.Booking;
@@ -25,7 +24,7 @@ public class ReturnlogMapper {
         return returnlog;
     }
 
-    public static ReturnlogRespDto convertEntityToDto(Returnlog returnlog, BookingRespDto bookingRespDto){
+    public static ReturnlogRespDto convertEntityToDto(Returnlog returnlog){
         return new ReturnlogRespDto(
                 returnlog.getId(),
                 returnlog.getActualReturn(),
@@ -33,7 +32,6 @@ public class ReturnlogMapper {
                 returnlog.getFuelLevel(),
                 returnlog.getExtraCharges(),
                 returnlog.getRemarks(),
-                bookingRespDto,
                 returnlog.getEmployee().getUser().getName()
         );
     }

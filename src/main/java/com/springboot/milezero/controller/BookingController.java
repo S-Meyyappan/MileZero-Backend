@@ -3,6 +3,7 @@ package com.springboot.milezero.controller;
 import com.springboot.milezero.dto.request.BookingReqDto;
 import com.springboot.milezero.dto.response.BookingQuoteRespDto;
 import com.springboot.milezero.dto.response.BookingRespDto;
+import com.springboot.milezero.dto.response.BookingSummaryDto;
 import com.springboot.milezero.enums.BookingStatus;
 import com.springboot.milezero.enums.BookingType;
 import com.springboot.milezero.enums.FilterSort;
@@ -99,6 +100,16 @@ public class BookingController {
     @GetMapping("/get/check-pickuplog/{id}")
     public BookingRespDto getWithCheckPickuplog(@PathVariable long id){
         return bookingService.getWithCheckPickuplog(id);
+    }
+
+    @GetMapping("/get/check-returnlog/{id}")
+    public BookingRespDto getWithCheckReturnlog(@PathVariable long id){
+        return bookingService.getWithCheckReturnlog(id);
+    }
+
+    @GetMapping("/get-summary/{id}")
+    public BookingSummaryDto getBookingSummary(@PathVariable long id){
+        return bookingService.getBookingSummary(id);
     }
 
 }

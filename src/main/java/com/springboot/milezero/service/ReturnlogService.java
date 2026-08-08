@@ -1,6 +1,5 @@
 package com.springboot.milezero.service;
 
-import com.springboot.milezero.dto.response.BookingRespDto;
 import com.springboot.milezero.dto.response.ReturnlogRespDto;
 import com.springboot.milezero.enums.BookingStatus;
 import com.springboot.milezero.enums.CurrentStatus;
@@ -98,10 +97,7 @@ public class ReturnlogService {
 
         Returnlog finalReturnlog = returnlogRepository.save(returnlog);
 
-        // Get Booking from returnlog
-        BookingRespDto finalBooking = bookingService.get(returnlog.getBooking().getId());
-
-        return ReturnlogMapper.convertEntityToDto(finalReturnlog, finalBooking);
+        return ReturnlogMapper.convertEntityToDto(finalReturnlog);
     }
 
 //    public BigDecimal calc(ReturnlogReqDto returnlogReqDto){

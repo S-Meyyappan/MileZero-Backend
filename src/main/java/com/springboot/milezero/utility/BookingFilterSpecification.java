@@ -44,18 +44,27 @@ public class BookingFilterSpecification {
 
                 // 4. Search
                 if (search != null && !search.trim().isEmpty()) {
-                    String searchPattern = "%" + search.toLowerCase() + "%";
+                    String trimmedSearch = search.trim();
+                    String searchPattern = "%" + trimmedSearch.toLowerCase() + "%";
+
+                    List<Predicate> searchSubPredicates = new ArrayList<>();
+
+                    // Add all text match queries
+                    searchSubPredicates.add(cb.like(cb.lower(bookingRoot.get("customer").get("user").get("name")), searchPattern));
+                    searchSubPredicates.add(cb.like(cb.lower(bookingRoot.get("vehicle").get("manufacturer")), searchPattern));
+                    searchSubPredicates.add(cb.like(cb.lower(bookingRoot.get("vehicle").get("model")), searchPattern));
+                    searchSubPredicates.add(cb.like(cb.lower(bookingRoot.get("returnBranch").get("name")), searchPattern));
+                    searchSubPredicates.add(cb.like(cb.lower(bookingRoot.get("returnBranch").get("city")), searchPattern));
+                    searchSubPredicates.add(cb.like(cb.lower(bookingRoot.get("pickupBranch").get("name")), searchPattern));
+                    searchSubPredicates.add(cb.like(cb.lower(bookingRoot.get("pickupBranch").get("city")), searchPattern));
+
+                    // BookingId Search Match
+                    if(trimmedSearch.matches("\\d+")) {
+                        searchSubPredicates.add(cb.equal(bookingRoot.get("id"), Long.valueOf(trimmedSearch)));
+                    }
 
                     // Combine all search fields into a single OR expression
-                    Predicate searchPredicate = cb.or(
-                            cb.like(cb.lower(bookingRoot.get("customer").get("user").get("name")), searchPattern),
-                            cb.like(cb.lower(bookingRoot.get("vehicle").get("manufacturer")), searchPattern),
-                            cb.like(cb.lower(bookingRoot.get("vehicle").get("model")), searchPattern),
-                            cb.like(cb.lower(bookingRoot.get("returnBranch").get("name")), searchPattern),
-                            cb.like(cb.lower(bookingRoot.get("returnBranch").get("city")), searchPattern),
-                            cb.like(cb.lower(bookingRoot.get("pickupBranch").get("name")), searchPattern),
-                            cb.like(cb.lower(bookingRoot.get("pickupBranch").get("city")), searchPattern)
-                    );
+                    Predicate searchPredicate = cb.or(searchSubPredicates.toArray(new Predicate[0]));
 
                     // Add the combined OR block to your main list of predicates
                     predicates.add(searchPredicate);
