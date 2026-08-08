@@ -13,6 +13,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/feature")
 @RequiredArgsConstructor
+@CrossOrigin("http://localhost:5173")
 public class FeatureController {
 
     private final FeatureService featureService;
