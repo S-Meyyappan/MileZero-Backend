@@ -1,23 +1,31 @@
 package com.springboot.milezero.service;
 
 import com.springboot.milezero.dto.request.EmployeeReqDto;
+import com.springboot.milezero.dto.response.BookingStatsDto;
+import com.springboot.milezero.dto.response.EmployeeDashboardDto;
 import com.springboot.milezero.dto.response.EmployeeRespDto;
 import com.springboot.milezero.enums.Role;
 import com.springboot.milezero.exception.ResourceAlreadyExistsException;
 import com.springboot.milezero.exception.ResourceNotFoundException;
+import com.springboot.milezero.mapper.EmployeeDashboardMapper;
 import com.springboot.milezero.mapper.EmployeeMapper;
 import com.springboot.milezero.mapper.UserMapper;
+import com.springboot.milezero.model.Booking;
 import com.springboot.milezero.model.Branch;
 import com.springboot.milezero.model.Employee;
 import com.springboot.milezero.model.User;
+import com.springboot.milezero.repository.BookingRepository;
 import com.springboot.milezero.repository.BranchRepository;
 import com.springboot.milezero.repository.EmployeeRepository;
 import com.springboot.milezero.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
 import java.util.List;
 
 @Service
@@ -27,6 +35,7 @@ public class EmployeeService {
     private final EmployeeRepository employeeRepository;
     private final UserRepository userRepository;
     private final BranchRepository branchRepository;
+    private final BookingRepository bookingRepository;
     private final PasswordEncoder passwordEncoder;
 
     @Transactional
@@ -83,5 +92,27 @@ public class EmployeeService {
         employee = employeeRepository.save(employee);
 
         return EmployeeMapper.convertEntityToDto(employee);
+    }
+
+    public EmployeeDashboardDto getMeDashboard(String email) {
+        Employee employee = employeeRepository.fetchByEmail(email)
+                .orElseThrow(() -> new ResourceNotFoundException("Employee Email Invalid"));
+
+        // Branch Id
+        long id = employee.getBranch().getId();
+
+        BookingStatsDto bookingStats = bookingRepository.fetchEmployeeBookingStats(id);
+
+        Instant today = Instant.now();
+
+        Pageable pageable = PageRequest.of(0, 4 );
+
+        List<Booking> upcomingPickups = bookingRepository.fetchEmployeeUpcomingPickups(id, today, pageable);
+
+        List<Booking> upcomingReturns = bookingRepository.fetchEmployeeUpcomingReturns(id, today, pageable);
+
+        List<Booking> recentBookings = bookingRepository.fetchEmployeeRecentBookings(id, today, pageable);
+
+        return EmployeeDashboardMapper.convertToEntity(employee, bookingStats, upcomingPickups, upcomingReturns, recentBookings);
     }
 }

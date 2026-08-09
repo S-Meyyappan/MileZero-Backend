@@ -42,6 +42,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/customer/get/me").hasAuthority(Role.CUSTOMER.name())
                         .requestMatchers("/api/booking/cancel/{id}").hasAuthority(Role.CUSTOMER.name())
                         .requestMatchers("/api/customer/update/me").hasAuthority(Role.CUSTOMER.name())
+                        .requestMatchers("/api/customer/get-dashboard/me").hasAuthority(Role.CUSTOMER.name())
 
                         //Employee API
                         .requestMatchers("/api/booking/get-by-branch/me").hasAnyAuthority(Role.EMPLOYEE.name(), Role.MANAGER.name())
