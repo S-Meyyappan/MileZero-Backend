@@ -1,6 +1,7 @@
 package com.springboot.milezero.controller;
 
 import com.springboot.milezero.dto.request.CustomerReqDto;
+import com.springboot.milezero.dto.response.CustomerDashboardDto;
 import com.springboot.milezero.dto.response.CustomerRespDto;
 import com.springboot.milezero.service.CustomerService;
 import jakarta.validation.Valid;
@@ -70,5 +71,11 @@ public class CustomerController {
                                @RequestParam(required = false) MultipartFile imageFile){
         String email = principal.getName();
         customerService.updateCustomer(email, name, phone, licenseNo, licenseExpiryDate, insurancePolicyNo, imageFile);
+    }
+
+    @GetMapping("/get-dashboard/me")
+    public CustomerDashboardDto getMeDashboard(Principal principal){
+        String email = principal.getName();
+        return customerService.getMeDashboard(email);
     }
 }

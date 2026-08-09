@@ -1,22 +1,30 @@
 package com.springboot.milezero.service;
 
 import com.springboot.milezero.dto.request.CustomerReqDto;
+import com.springboot.milezero.dto.response.BookingStatsDto;
+import com.springboot.milezero.dto.response.CustomerDashboardDto;
 import com.springboot.milezero.dto.response.CustomerRespDto;
 import com.springboot.milezero.enums.Role;
 import com.springboot.milezero.exception.ResourceNotFoundException;
+import com.springboot.milezero.mapper.CustomerDashboardMapper;
 import com.springboot.milezero.mapper.CustomerMapper;
 import com.springboot.milezero.mapper.UserMapper;
+import com.springboot.milezero.model.Booking;
 import com.springboot.milezero.model.Customer;
 import com.springboot.milezero.model.User;
+import com.springboot.milezero.repository.BookingRepository;
 import com.springboot.milezero.repository.CustomerRepository;
 import com.springboot.milezero.repository.UserRepository;
 import com.springboot.milezero.utility.UploadUtility;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.Instant;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -26,6 +34,8 @@ public class CustomerService {
 
     private final CustomerRepository customerRepository;
     private final UserRepository userRepository;
+    private final BookingRepository bookingRepository;
+
     private final PasswordEncoder passwordEncoder;
 
     private static final String UPLOAD_DIR = "D:/MileZero/MileZero-Frontend/public/customer";
@@ -92,6 +102,25 @@ public class CustomerService {
         customer.setLicensePhoto(imageUrl);
 
         customerRepository.save(customer);
+    }
+
+    public CustomerDashboardDto getMeDashboard(String email) {
+        Customer customer = customerRepository.fetchByEmail(email)
+                .orElseThrow(() -> new ResourceNotFoundException("Customer Email Invalid"));
+
+        BookingStatsDto bookingStatsDto = bookingRepository.fetchCustomerBookingStats(customer.getId());
+
+        Instant today = Instant.now();
+
+        Pageable upcoming = PageRequest.of(0, 3);
+
+        List<Booking> upcomingBookings = bookingRepository.fetchUpcomingCustomerBooking(customer.getId(), today, upcoming);
+
+        Pageable recent = PageRequest.of(0, 3);
+
+        List<Booking> recentBookings = bookingRepository.fetchRecentCustomerBookings(customer.getId(), today, recent );
+
+        return CustomerDashboardMapper.convertToDto(customer, bookingStatsDto, upcomingBookings, recentBookings);
     }
 
     /*
