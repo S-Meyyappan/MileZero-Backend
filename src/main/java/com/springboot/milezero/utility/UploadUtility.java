@@ -12,6 +12,10 @@ import java.util.List;
 import java.util.Objects;
 
 public class UploadUtility {
+    private UploadUtility() {
+        /* This utility class should not be instantiated */
+    }
+
 
     public static void validateImage(MultipartFile imageFile) {
         if (imageFile != null && !imageFile.isEmpty()) {

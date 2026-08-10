@@ -10,6 +10,10 @@ import java.math.BigDecimal;
 import java.time.Instant;
 
 public class ReturnlogMapper {
+    private ReturnlogMapper() {
+        /* This utility class should not be instantiated */
+    }
+
 
     public static Returnlog createEntity(Long odometer, Instant actualReturn, FuelLevel fuelLevel, String remarks, Booking booking, Employee employee, BigDecimal finalPrice){
         Returnlog returnlog = new Returnlog();

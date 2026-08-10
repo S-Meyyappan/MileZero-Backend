@@ -12,6 +12,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PickuplogFilterSpecification {
+    private PickuplogFilterSpecification() {
+        /* This utility class should not be instantiated */
+    }
+
 
     public static Specification<Pickuplog> getFilterSpecification(long branchId,
                                                                   String search,

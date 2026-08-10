@@ -5,6 +5,10 @@ import com.springboot.milezero.model.PickupImage;
 import com.springboot.milezero.model.Pickuplog;
 
 public class PickupImageMapper {
+    private PickupImageMapper() {
+        /* This utility class should not be instantiated */
+    }
+
 
     public static PickupImage createEntity(String fileName, Booking booking, Pickuplog pickuplog) {
         PickupImage pickupImage = new PickupImage();

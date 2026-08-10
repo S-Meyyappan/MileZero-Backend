@@ -5,6 +5,10 @@ import java.math.RoundingMode;
 import java.time.Duration;
 
 public class DurationCalcUtil {
+    private DurationCalcUtil() {
+        /* This utility class should not be instantiated */
+    }
+
 
     public static BigDecimal getDurationOfDays(Duration duration) {
         BigDecimal days = BigDecimal.valueOf(duration.toDaysPart());

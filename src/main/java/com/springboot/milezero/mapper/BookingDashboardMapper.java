@@ -4,6 +4,10 @@ import com.springboot.milezero.dto.response.*;
 import com.springboot.milezero.model.Booking;
 
 public class BookingDashboardMapper {
+    private BookingDashboardMapper() {
+        /* This utility class should not be instantiated */
+    }
+
 
     public static BookingDashboardDto convertToDto(Booking booking) {
         return new BookingDashboardDto(

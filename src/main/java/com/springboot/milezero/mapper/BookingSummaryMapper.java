@@ -7,6 +7,11 @@ import com.springboot.milezero.model.Returnlog;
 
 public class BookingSummaryMapper {
 
+    private BookingSummaryMapper() {
+        /* This utility class should not be instantiated */
+    }
+
+
     public static BookingSummaryDto convertEntityToDto(BookingRespDto booking, Pickuplog pickuplog, Returnlog returnlog){
         return new BookingSummaryDto(
                 booking,

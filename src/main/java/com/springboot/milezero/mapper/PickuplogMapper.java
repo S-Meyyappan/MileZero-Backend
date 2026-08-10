@@ -9,6 +9,10 @@ import com.springboot.milezero.model.Pickuplog;
 import java.time.Instant;
 
 public class PickuplogMapper {
+    private PickuplogMapper() {
+        /* This utility class should not be instantiated */
+    }
+
 
     public static Pickuplog createEntity(Long odometer, FuelLevel fuelLevel, String remarks, Booking booking, Employee employee) {
         Pickuplog pickuplog = new Pickuplog();

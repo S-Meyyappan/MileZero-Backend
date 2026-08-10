@@ -10,6 +10,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AvailableVehicleFilterSpecification {
+    private AvailableVehicleFilterSpecification() {
+        /* This utility class should not be instantiated */
+    }
+
 
     public static Specification<Vehicle> getAvailableFleet(
                                             Instant chosenPickup,

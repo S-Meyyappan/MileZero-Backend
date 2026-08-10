@@ -6,6 +6,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
 public class BookingPageableUtil {
+    private BookingPageableUtil() {
+        /* This utility class should not be instantiated */
+    }
+
 
     public static Pageable getPageable(int page, int size, FilterSort filterSort) {
         Sort sort;

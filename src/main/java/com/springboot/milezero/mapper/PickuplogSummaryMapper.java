@@ -7,6 +7,10 @@ import com.springboot.milezero.model.Pickuplog;
 import java.util.List;
 
 public class PickuplogSummaryMapper {
+    private PickuplogSummaryMapper() {
+        /* This utility class should not be instantiated */
+    }
+
 
     public static PickupSummaryDto convertToEntity(Pickuplog pickuplog, Booking booking, List<String> pickupImages){
         return new PickupSummaryDto(

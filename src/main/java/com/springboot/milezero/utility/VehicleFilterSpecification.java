@@ -2,7 +2,6 @@ package com.springboot.milezero.utility;
 
 import com.springboot.milezero.model.Vehicle;
 import jakarta.persistence.criteria.CriteriaBuilder;
-import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
 import org.springframework.data.jpa.domain.Specification;
@@ -11,6 +10,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class VehicleFilterSpecification {
+    private VehicleFilterSpecification() {
+        /* This utility class should not be instantiated */
+    }
 
     public static Specification<Vehicle> getFilteredVehicles(Long branchId,
                                                              String search,
@@ -20,65 +22,65 @@ public class VehicleFilterSpecification {
                                                              Integer seats,
                                                              String currentStatus,
                                                              String category) {
-        return new Specification<Vehicle>() {
-            @Override
-            public Predicate toPredicate(Root<Vehicle> vehicleRoot, CriteriaQuery<?> query, CriteriaBuilder cb) {
-                List<Predicate> predicates = new ArrayList<>();
-
-                // 2. Search Logic
-
-                // 2.1 Search by brand or model
-                if (search != null && !search.trim().isEmpty()) {
-                    String lowerCaseSearch = "%" + search.toLowerCase() + "%";
-                    Predicate brandLike = cb.like(cb.lower(vehicleRoot.get("manufacturer")), lowerCaseSearch);
-                    Predicate modelLike = cb.like(cb.lower(vehicleRoot.get("model")), lowerCaseSearch);
-                    // Match brand or model
-                    predicates.add(cb.or(brandLike, modelLike));
-                }
-
-                // 2.2 Filter by brand
-                if (brand != null && !brand.trim().isEmpty()) {
-                    String lowerCaseBrand = brand.toLowerCase();
-                    predicates.add(cb.equal(cb.lower(vehicleRoot.get("manufacturer")), lowerCaseBrand));
-                }
-
-                // 2.3 Filter By FuelType
-                if (fuelType != null && !fuelType.trim().isEmpty()) {
-                    String lowerCaseFuelType = fuelType.toLowerCase();
-                    predicates.add(cb.equal(cb.lower(vehicleRoot.get("fuelType")), lowerCaseFuelType));
-                }
-
-                // 2.4 Filter by transmission
-                if (transmission != null && !transmission.trim().isEmpty()) {
-                    String lowerCaseTransmission = transmission.toLowerCase();
-                    predicates.add(cb.equal(cb.lower(vehicleRoot.get("transmission")), lowerCaseTransmission));
-                }
-
-                // 2.5 Filter by seats
-                if (seats != null) {
-                    predicates.add(cb.equal(vehicleRoot.get("seatCount"), seats));
-                }
-
-                // 2.6 Filter by category
-                if (category != null && !category.trim().isEmpty()) {
-                    String lowerCaseCategory = category.toLowerCase();
-                    predicates.add(cb.equal(cb.lower(vehicleRoot.get("category").get("name")), lowerCaseCategory));
-                }
-
-                // 2.7 Filter by branch
-                if (branchId != null) {
-                    predicates.add(cb.equal(vehicleRoot.get("branch").get("id"), branchId));
-                }
-
-                // 2.8 Filter by current status
-                if (currentStatus != null && !currentStatus.trim().isEmpty()) {
-                    predicates.add(cb.equal(cb.lower(vehicleRoot.get("currentStatus")), currentStatus.toLowerCase()));
-                }
-
-
-                // 3. Return the combined predicate
-                return cb.and(predicates.toArray(new Predicate[0]));
-            }
+        return (root, query, cb) -> {
+            List<Predicate> predicates = new ArrayList<>();
+            // 2. Search Logic
+            // 2.1 Search by brand or model
+            addSearchPredicate(predicates, root, cb, search);
+            // 2.2 Filter by brand
+            addStringFilter(predicates, root, cb, "manufacturer", brand);
+            // 2.3 Filter By FuelType
+            addStringFilter(predicates, root, cb, "fuelType", fuelType);
+            // 2.4 Filter by transmission
+            addStringFilter(predicates, root, cb, "transmission", transmission);
+            // 2.5 Filter by seats
+            addSeatsFilter(predicates, root, cb, seats);
+            // 2.6 Filter by category
+            addCategoryFilter(predicates, root, cb, category);
+            // 2.7 Filter by branch
+            addBranchFilter(predicates, root, cb, branchId);
+            // 2.8 Filter by current status
+            addStringFilter(predicates, root, cb, "currentStatus", currentStatus);
+            // 3. Return the combined predicate
+            return cb.and(predicates.toArray(new Predicate[0]));
         };
+    }
+
+    private static void addSearchPredicate(List<Predicate> predicates, Root<?> root, CriteriaBuilder cb, String search) {
+        if (isNotBlank(search)) {
+            String value = "%" + search.toLowerCase() + "%";
+            Predicate brandLike = cb.like(cb.lower(root.get("manufacturer")), value);
+            Predicate modelLike = cb.like(cb.lower(root.get("model")), value);
+            // Match brand or model
+            predicates.add(cb.or(brandLike, modelLike));
+        }
+    }
+
+    private static void addStringFilter(List<Predicate> predicates, Root<?> root, CriteriaBuilder cb, String field, String value) {
+        if (isNotBlank(value)) {
+            predicates.add(cb.equal(cb.lower(root.get(field)), value.toLowerCase()));
+        }
+    }
+
+    private static void addSeatsFilter(List<Predicate> predicates, Root<?> root, CriteriaBuilder cb, Integer seats) {
+        if (seats != null) {
+            predicates.add(cb.equal(root.get("seatCount"), seats));
+        }
+    }
+
+    private static void addCategoryFilter(List<Predicate> predicates, Root<?> root, CriteriaBuilder cb, String category) {
+        if (isNotBlank(category)) {
+            predicates.add(cb.equal(cb.lower(root.get("category").get("name")), category.toLowerCase()));
+        }
+    }
+
+    private static void addBranchFilter(List<Predicate> predicates, Root<?> root, CriteriaBuilder cb, Long branchId) {
+        if (branchId != null) {
+            predicates.add(cb.equal(root.get("branch").get("id"), branchId));
+        }
+    }
+
+    private static boolean isNotBlank(String value) {
+        return value != null && !value.trim().isEmpty();
     }
 }

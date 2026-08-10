@@ -7,6 +7,10 @@ import org.springframework.data.domain.Sort;
 
 
 public class PageableVehicleUtil {
+    private PageableVehicleUtil() {
+        /* This utility class should not be instantiated */
+    }
+
 
     public static Pageable getPageable(int page, int size, FilterSort filterSort) {
         // 1. Declare Sort not sorted by default

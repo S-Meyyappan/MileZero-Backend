@@ -8,6 +8,10 @@ import com.springboot.milezero.model.Employee;
 import java.util.List;
 
 public class EmployeeDashboardMapper {
+    private EmployeeDashboardMapper() {
+        /* This utility class should not be instantiated */
+    }
+
 
     public static EmployeeDashboardDto convertToEntity(Employee employee, BookingStatsDto bookingStats, List<Booking> upcomingPickups, List<Booking> upcomingReturns, List<Booking> recentBookings){
         return new EmployeeDashboardDto(
