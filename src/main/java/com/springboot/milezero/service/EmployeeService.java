@@ -26,6 +26,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 @Service
@@ -105,11 +106,13 @@ public class EmployeeService {
 
         Instant today = Instant.now();
 
+        Instant tomorrow = today.plus(2, ChronoUnit.DAYS);
+
         Pageable pageable = PageRequest.of(0, 4 );
 
-        List<Booking> upcomingPickups = bookingRepository.fetchEmployeeUpcomingPickups(id, today, pageable);
+        List<Booking> upcomingPickups = bookingRepository.fetchEmployeeUpcomingPickups(id, today, tomorrow, pageable);
 
-        List<Booking> upcomingReturns = bookingRepository.fetchEmployeeUpcomingReturns(id, today, pageable);
+        List<Booking> upcomingReturns = bookingRepository.fetchEmployeeUpcomingReturns(id, today, tomorrow, pageable);
 
         List<Booking> recentBookings = bookingRepository.fetchEmployeeRecentBookings(id, today, pageable);
 

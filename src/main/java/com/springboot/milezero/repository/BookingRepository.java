@@ -86,18 +86,20 @@ public interface BookingRepository extends JpaRepository<Booking, Long>, JpaSpec
             where b.pickupBranch.id = :id
             and b.bookingStatus = 'BOOKED'
             and b.plannedPickup >= :today
+            and b.plannedPickup <= :tomorrow
             ORDER BY b.plannedPickup ASC
             """)
-    List<Booking> fetchEmployeeUpcomingPickups(long id, Instant today, Pageable pageable);
+    List<Booking> fetchEmployeeUpcomingPickups(long id, Instant today, Instant tomorrow, Pageable pageable);
 
     @Query("""
             SELECT b FROM Booking b
             where b.returnBranch.id = :id
-            and b.bookingStatus = 'BOOKED'
+            and b.bookingStatus = 'ACTIVE'
             and b.plannedReturn >= :today
+            and b.plannedReturn <= :tomorrow
             ORDER BY b.plannedReturn ASC
             """)
-    List<Booking> fetchEmployeeUpcomingReturns(long id, Instant today, Pageable pageable);
+    List<Booking> fetchEmployeeUpcomingReturns(long id, Instant today, Instant tomorrow, Pageable pageable);
 
     @Query("""
             SELECT b FROM Booking b
