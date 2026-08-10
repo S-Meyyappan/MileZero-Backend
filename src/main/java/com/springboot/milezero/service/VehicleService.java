@@ -3,6 +3,7 @@ package com.springboot.milezero.service;
 import com.springboot.milezero.dto.request.VehicleReqDto;
 import com.springboot.milezero.dto.request.VehicleUpdateDto;
 import com.springboot.milezero.dto.response.VehicleRespDto;
+import com.springboot.milezero.enums.CurrentStatus;
 import com.springboot.milezero.enums.FilterSort;
 import com.springboot.milezero.enums.FuelType;
 import com.springboot.milezero.enums.Transmission;
@@ -50,9 +51,9 @@ public class VehicleService {
         Branch branch = branchRepository.findById(vehicleReqDto.branchId())
                 .orElseThrow(() -> new ResourceNotFoundException("Branch not found"));
 
-        List<Feature> features = featureRepository.findAllById(vehicleReqDto.featureList());
+        List<Feature> features = featureRepository.findAllById(vehicleReqDto.featureIds());
 
-        if(features.size() != vehicleReqDto.featureList().size()){
+        if(features.size() != vehicleReqDto.featureIds().size()){
             throw new ResourceNotFoundException("Some features not found");
         }
 
@@ -60,6 +61,7 @@ public class VehicleService {
 
         vehicle.setCategory(category);
         vehicle.setBranch(branch);
+        vehicle.setCurrentStatus(CurrentStatus.AVAILABLE);
 
         Vehicle finalVehicle = vehicleRepository.save(vehicle);
 
@@ -250,5 +252,42 @@ public class VehicleService {
 
     public List<Integer> getAllSeats() {
         return vehicleRepository.getAllSeats();
+    }
+
+    @Transactional
+    public void addVehicle(String email, VehicleReqDto dto, MultipartFile image) {
+        Employee employee = employeeRepository.fetchByEmail(email)
+                .orElseThrow(() -> new ResourceNotFoundException("Employee not found"));
+
+        Category category = categoryRepository.findById(dto.categoryId())
+                .orElseThrow(() -> new ResourceNotFoundException("Category Id Invalid"));
+
+        Vehicle vehicle = VehicleMapper.convertDtoToEntity(dto);
+
+        vehicle.setBranch(employee.getBranch());
+        vehicle.setCategory(category);
+        vehicle.setCurrentStatus(CurrentStatus.AVAILABLE);
+
+        // Validate Features
+        List<Feature> features = featureRepository.findAllById(dto.featureIds());
+        if(features.size() != dto.featureIds().size()){
+            throw new ResourceNotFoundException("Some features not found");
+        }
+
+        // Add Image
+        if(image != null) {
+            UploadUtility.validateImage(image);
+            String imageFileName = UploadUtility.saveImage(image, UPLOAD_DIR);
+            vehicle.setImage(imageFileName);
+        }
+
+        Vehicle finalVehicle = vehicleRepository.save(vehicle);
+
+        // Update Features
+        List<VehicleFeature> vehicleFeatures = features.stream()
+                .map(f -> VehicleFeatureMapper.convertEntityToEntity(f,finalVehicle))
+                .toList();
+
+        vehicleFeatureRepository.saveAll(vehicleFeatures);
     }
 }

@@ -16,7 +16,7 @@ public class UploadUtility {
     public static void validateImage(MultipartFile imageFile) {
         if (imageFile != null && !imageFile.isEmpty()) {
 
-            List<String> allowedExtensions = List.of("jpg", "jpeg", "pdf");
+            List<String> allowedExtensions = List.of("jpg", "jpeg", "png", "pdf");
 
             String fileName = Objects.requireNonNull(imageFile.getOriginalFilename());
 

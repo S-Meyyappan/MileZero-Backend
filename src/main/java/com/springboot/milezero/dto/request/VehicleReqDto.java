@@ -23,6 +23,6 @@ public record VehicleReqDto(
         Boolean withAc,
         Long categoryId,
         Long branchId,
-        List<Long> featureList
+        List<Long> featureIds
 ) {
 }

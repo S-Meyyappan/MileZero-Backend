@@ -77,6 +77,14 @@ public class VehicleController {
         vehicleService.update(id, vehicle, image);
     }
 
+    @PostMapping("/add-new")
+    public void update(Principal principal,
+                       @RequestPart("vehicle") VehicleReqDto vehicle,
+                       @RequestPart(value = "image", required = false) MultipartFile image){
+        String email = principal.getName();
+        vehicleService.addVehicle(email, vehicle, image);
+    }
+
     @GetMapping("/get-all-brands")
     public List<String> getAllBrands(){
         return vehicleService.getAllBrands();
