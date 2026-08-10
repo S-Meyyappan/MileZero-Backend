@@ -1,0 +1,80 @@
+package com.springboot.milezero.mapper;
+
+import com.springboot.milezero.dto.response.*;
+import com.springboot.milezero.model.Booking;
+import com.springboot.milezero.model.Pickuplog;
+
+import java.util.List;
+
+public class PickuplogSummaryMapper {
+
+    public static PickupSummaryDto convertToEntity(Pickuplog pickuplog, Booking booking, List<String> pickupImages){
+        return new PickupSummaryDto(
+
+            new BookingDashboardDto(
+                    booking.getId(),
+                    booking.getBookedRate(),
+                    booking.getBookingType(),
+                    booking.getBookingStatus(),
+                    booking.getEstimatedCost(),
+                    booking.getFinalCost(),
+                    booking.getDuration(),
+                    booking.getIncludedKm(),
+                    booking.getPlannedPickup(),
+                    booking.getPlannedReturn(),
+                    new CustomerRespDto(
+                            booking.getCustomer().getId(),
+                            booking.getCustomer().getUser().getName(),
+                            booking.getCustomer().getLicenseNo(),
+                            booking.getCustomer().getLicenseExpiryDate(),
+                            booking.getCustomer().getPhone(),
+                            booking.getCustomer().getInsurancePolicyNo(),
+                            booking.getCustomer().getLicensePhoto()),
+                    new BranchRespDto(
+                            booking.getPickupBranch().getId(),
+                            booking.getPickupBranch().getName(),
+                            booking.getPickupBranch().getCity(),
+                            booking.getPickupBranch().getAddress(),
+                            booking.getPickupBranch().getPhone()),
+                    new BranchRespDto(
+                            booking.getReturnBranch().getId(),
+                            booking.getReturnBranch().getName(),
+                            booking.getReturnBranch().getCity(),
+                            booking.getReturnBranch().getAddress(),
+                            booking.getReturnBranch().getPhone()),
+                    new VehicleDto(
+                            booking.getVehicle().getId(),
+                            booking.getVehicle().getManufacturer(),
+                            booking.getVehicle().getModel(),
+                            booking.getVehicle().getRegistrationNo(),
+                            booking.getVehicle().getCurrentOdometer(),
+                            booking.getVehicle().getManufacturingYear(),
+                            booking.getVehicle().getFuelType(),
+                            booking.getVehicle().getTransmission(),
+                            booking.getVehicle().getDriveType(),
+                            booking.getVehicle().getWithAc(),
+                            booking.getVehicle().getSeatCount(),
+                            booking.getVehicle().getLuggageCapacity(),
+                            new CategoryRespDto(
+                                    booking.getCategory().getId(),
+                                    booking.getCategory().getName(),
+                                    booking.getCategory().getBasePricePerDay(),
+                                    booking.getCategory().getBasePricePerHour(),
+                                    booking.getCategory().getBasePricePerKm(),
+                                    booking.getCategory().getIncludedKmPerDay()
+                            ))
+            ),
+            new PickuplogRespDto(
+                    pickuplog.getId(),
+                    pickuplog.getActualPickup(),
+                    pickuplog.getOdometer(),
+                    pickuplog.getFuelLevel(),
+                    pickuplog.getRemarks(),
+                    pickuplog.getEmployee().getUser().getName()
+            ),
+
+            pickupImages
+        );
+        
+    }
+}

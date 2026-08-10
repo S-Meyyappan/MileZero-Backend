@@ -1,23 +1,31 @@
 package com.springboot.milezero.service;
 
+import com.springboot.milezero.dto.response.PickupSummaryDto;
 import com.springboot.milezero.dto.response.PickuplogRespDto;
-import com.springboot.milezero.enums.BookingStatus;
-import com.springboot.milezero.enums.CurrentStatus;
-import com.springboot.milezero.enums.FuelLevel;
+import com.springboot.milezero.enums.*;
 import com.springboot.milezero.exception.ResourceNotFoundException;
 import com.springboot.milezero.mapper.PickupImageMapper;
 import com.springboot.milezero.mapper.PickuplogMapper;
+import com.springboot.milezero.mapper.PickuplogSummaryMapper;
 import com.springboot.milezero.model.*;
 import com.springboot.milezero.repository.*;
+import com.springboot.milezero.utility.BookingPageableUtil;
+import com.springboot.milezero.utility.PickuplogFilterSpecification;
 import com.springboot.milezero.utility.UploadUtility;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.Instant;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -88,5 +96,41 @@ public class PickuplogService {
                 .orElseThrow(() -> new ResourceNotFoundException("Booking Id Invalid"));
 
         return PickuplogMapper.convertEntityToDto(pickuplog);
+    }
+
+
+    public Page<PickupSummaryDto> getAllByEmployee(String email, String search, BookingType bookingType, BookingStatus bookingStatus, String category, Instant startDate, Instant endDate, int page, int size, FilterSort filterSort) {
+        Employee employee = employeeRepository.fetchByEmail(email)
+                .orElseThrow(() -> new ResourceNotFoundException("Employee not found"));
+
+        Pageable pageable = BookingPageableUtil.getPageable(page, size, filterSort);
+
+        // Pass employee branchId
+        long branchId = employee.getBranch().getId();
+
+        Specification<Pickuplog> spec = PickuplogFilterSpecification.getFilterSpecification(branchId, search, bookingType, bookingStatus, category, startDate, endDate);
+
+        // Fetch paginated and filtered data
+        Page<Pickuplog> pickuplogs = pickuplogRepository.findAll(spec, pageable);
+
+        List<Long> pickupIds = pickuplogs.getContent().stream()
+                                .map(Pickuplog::getId)
+                                .toList();
+
+        List<PickupImage> pickupImageList = pickupImageRepository.findByPickuplogIn(pickupIds);
+
+        Map<Long, List<String>> pickupImageMap = pickupImageList.stream()
+                .collect(Collectors.groupingBy(
+                        pickupImage -> pickupImage.getPickuplog().getId(),
+                        Collectors.mapping(PickupImage::getUrl, Collectors.toList())
+                ));
+
+        return pickuplogs
+                .map(pickuplog ->
+                        PickuplogSummaryMapper.convertToEntity(
+                            pickuplog,
+                            pickuplog.getBooking(),
+                            pickupImageMap.get(pickuplog.getId())
+                ));
     }
 }
