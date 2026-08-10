@@ -2,6 +2,7 @@ package com.springboot.milezero.controller;
 
 import com.springboot.milezero.dto.request.AdminDto;
 import com.springboot.milezero.dto.request.TokenDto;
+import com.springboot.milezero.dto.response.UserRespDto;
 import com.springboot.milezero.model.User;
 import com.springboot.milezero.service.UserService;
 import com.springboot.milezero.utility.JwtUtility;
@@ -44,6 +45,18 @@ public class AuthController {
                 user.getRole(),
                 jwtUtility.extractExpiration(token).toString()
         );
+    }
+
+    @GetMapping("/check-user")
+    // We get the email from the principal passed in Bearer token decoded by jwtUtility
+    // Then we get the user from the email
+
+    public UserRespDto getUserDetails(Principal principal) {
+        String email = principal.getName();
+        User user = userService.findByEmail(email);
+        return new UserRespDto(
+                user.getName(),
+                user.getRole());
     }
 
 }

@@ -32,6 +32,7 @@ public class SecurityConfig {
                         // Auth API
                         .requestMatchers(HttpMethod.OPTIONS,"/api/**").permitAll()
                         .requestMatchers("/api/auth/login").authenticated() // Should authenticate user at login
+                        .requestMatchers("/api/auth/check-user").authenticated()
 
                         .requestMatchers("/api/vehicle/get-all").permitAll()
                         .requestMatchers("/api/employee/add").permitAll()
