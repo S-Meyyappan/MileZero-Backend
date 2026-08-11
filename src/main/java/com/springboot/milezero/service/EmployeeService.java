@@ -1,6 +1,7 @@
 package com.springboot.milezero.service;
 
 import com.springboot.milezero.dto.request.EmployeeReqDto;
+import com.springboot.milezero.dto.request.EmployeeUpdateDto;
 import com.springboot.milezero.dto.response.BookingStatsDto;
 import com.springboot.milezero.dto.response.EmployeeDashboardDto;
 import com.springboot.milezero.dto.response.EmployeeRespDto;
@@ -51,6 +52,16 @@ public class EmployeeService {
                                                     employeeReqDto.password(),
                                                     employeeReqDto.role());
         user.setPassword(passwordEncoder.encode(user.getPassword()));
+
+        if(user.getRole() == Role.MANAGER){
+            long branchId = employeeReqDto.branchId();
+
+            // Check if there is a manager for the same branch
+            if(employeeRepository.hasManager(branchId).isPresent()){
+                throw new ResourceAlreadyExistsException("Manager Already Exists");
+            }
+        }
+
         user = userRepository.save(user);
 
         // 3. Get Employee from Dto
@@ -77,7 +88,7 @@ public class EmployeeService {
                 .toList();
     }
 
-    public EmployeeRespDto updateManager(long id) {
+    public void updateManager(long id) {
         Employee employee = employeeRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Employee Id Invalid"));
 
@@ -90,11 +101,45 @@ public class EmployeeService {
 
         employee.getUser().setRole(Role.MANAGER);
 
-        employee = employeeRepository.save(employee);
-
-        return EmployeeMapper.convertEntityToDto(employee);
+        employeeRepository.save(employee);
     }
 
+    public void removeManager(long id) {
+        Employee employee = employeeRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Employee Id Invalid"));
+
+        // Check if there is a manager for the same branch
+        if(employee.getUser().getRole() != Role.MANAGER){
+            throw new ResourceAlreadyExistsException("Not a valid Manager");
+        }
+
+        employee.getUser().setRole(Role.EMPLOYEE);
+
+        employeeRepository.save(employee);
+    }
+
+
+    public void delete(long id) {
+        Employee employee = employeeRepository.fetchById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Employee Id Invalid"));
+
+        employeeRepository.delete(employee);
+        userRepository.delete(employee.getUser());
+    }
+
+    public void update(long id, EmployeeUpdateDto dto) {
+        Employee employee = employeeRepository.fetchById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Employee Id Invalid"));
+
+        Branch branch = branchRepository.findById(dto.branchId())
+                .orElseThrow(() -> new ResourceNotFoundException("Branch Id Invalid"));
+
+        employee.getUser().setName(dto.name());
+        employee.setPhone(dto.phone());
+        employee.setBranch(branch);
+
+        employeeRepository.save(employee);
+    }
     public EmployeeDashboardDto getMeDashboard(String email) {
         Employee employee = employeeRepository.fetchByEmail(email)
                 .orElseThrow(() -> new ResourceNotFoundException("Employee Email Invalid"));

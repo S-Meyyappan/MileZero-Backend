@@ -1,6 +1,7 @@
 package com.springboot.milezero.controller;
 
 import com.springboot.milezero.dto.request.EmployeeReqDto;
+import com.springboot.milezero.dto.request.EmployeeUpdateDto;
 import com.springboot.milezero.dto.response.EmployeeDashboardDto;
 import com.springboot.milezero.dto.response.EmployeeRespDto;
 import com.springboot.milezero.service.EmployeeService;
@@ -47,8 +48,23 @@ public class EmployeeController {
     }
 
     @PostMapping("/set-manager/{id}")
-    public EmployeeRespDto updateManager(@PathVariable long id){
-        return employeeService.updateManager(id);
+    public void updateManager(@PathVariable long id){
+        employeeService.updateManager(id);
+    }
+
+    @PostMapping("/remove-manager/{id}")
+    public void removeManager(@PathVariable long id){
+        employeeService.removeManager(id);
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public void delete(@PathVariable long id){
+        employeeService.delete(id);
+    }
+
+    @PutMapping("/update/{id}")
+    public void update(@PathVariable long id, @RequestBody EmployeeUpdateDto dto){
+        employeeService.update(id, dto);
     }
 
     @GetMapping("/get-dashboard/me")
