@@ -33,4 +33,10 @@ public class BranchController {
     public List<BranchRespDto> getAll() {
         return branchService.getAll();
     }
+
+    @PutMapping("/update/{id}")
+    public void update(@PathVariable long id , @Valid @RequestBody BranchReqDto branchReqDto){
+        branchService.update(id, branchReqDto);
+    }
+
 }
