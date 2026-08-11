@@ -58,6 +58,7 @@ public class PickuplogSummaryMapper {
                             booking.getVehicle().getDriveType(),
                             booking.getVehicle().getWithAc(),
                             booking.getVehicle().getSeatCount(),
+                            booking.getVehicle().getImage(),
                             booking.getVehicle().getLuggageCapacity(),
                             new CategoryRespDto(
                                     booking.getCategory().getId(),
