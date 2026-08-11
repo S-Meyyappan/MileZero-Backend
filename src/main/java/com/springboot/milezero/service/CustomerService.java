@@ -123,6 +123,14 @@ public class CustomerService {
         return CustomerDashboardMapper.convertToDto(customer, bookingStatsDto, upcomingBookings, recentBookings);
     }
 
+    public void delete(long id) {
+        Customer customer = customerRepository.fetchById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Customer Id Invalid"));
+
+        customerRepository.delete(customer);
+        userRepository.delete(customer.getUser());
+    }
+
     /*
     public void update(@Valid CustomerReqDto dto, long id) {
         Customer customer = customerRepository.findById(id)
