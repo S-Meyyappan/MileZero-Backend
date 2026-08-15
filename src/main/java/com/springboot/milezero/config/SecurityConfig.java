@@ -29,6 +29,9 @@ public class SecurityConfig {
                 .csrf(csrf-> csrf.disable())
                 .authorizeHttpRequests(authorize -> authorize
 
+                        // Swagger UI & OpenAPI Whitelist
+                        .requestMatchers("/v3/api-docs/**","/swagger-ui/**","/swagger-ui.html").permitAll()
+
                         // Auth API
                         .requestMatchers(HttpMethod.OPTIONS,"/api/**").permitAll()
                         .requestMatchers("/api/auth/login").authenticated() // Should authenticate user at login
