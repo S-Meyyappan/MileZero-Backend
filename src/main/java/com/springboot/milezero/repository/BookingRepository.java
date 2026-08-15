@@ -38,15 +38,15 @@ public interface BookingRepository extends JpaRepository<Booking, Long>, JpaSpec
 
     @Query("""
             SELECT
-            COUNT(b.id) as total,
-            SUM(CASE WHEN b.bookingStatus = 'BOOKED' THEN 1 ELSE 0 END) as booked,
-            SUM(CASE WHEN b.bookingStatus = 'ACTIVE' THEN 1 ELSE 0 END) as activeTrips,
-            SUM(CASE WHEN b.bookingStatus = 'COMPLETED' THEN 1 ELSE 0 END) as completed,
-            SUM(CASE WHEN b.bookingStatus = 'CANCELLED' THEN 1 ELSE 0 END) as cancelled,
-            SUM(CASE WHEN b.bookingStatus = 'RETURNED' THEN 1 ELSE 0 END) as returned,
-            SUM(CASE WHEN b.bookingStatus = 'NO_SHOW' THEN 1 ELSE 0 END) as missed
-            FROM Booking b
-            WHERE b.customer.id = :id
+                     COUNT(b.id) as total,
+                     COALESCE(SUM(CASE WHEN b.bookingStatus = 'BOOKED' THEN 1 ELSE 0 END), 0) as booked,
+                     COALESCE(SUM(CASE WHEN b.bookingStatus = 'ACTIVE' THEN 1 ELSE 0 END), 0) as activeTrips,
+                     COALESCE(SUM(CASE WHEN b.bookingStatus = 'COMPLETED' THEN 1 ELSE 0 END), 0) as completed,
+                     COALESCE(SUM(CASE WHEN b.bookingStatus = 'CANCELLED' THEN 1 ELSE 0 END), 0) as cancelled,
+                     COALESCE(SUM(CASE WHEN b.bookingStatus = 'RETURNED' THEN 1 ELSE 0 END), 0) as returned,
+                     COALESCE(SUM(CASE WHEN b.bookingStatus = 'NO_SHOW' THEN 1 ELSE 0 END), 0) as missed
+                 FROM Booking b
+                 WHERE b.customer.id = :id
             """)
     BookingStatsDto fetchCustomerBookingStats(long id);
 
@@ -69,15 +69,15 @@ public interface BookingRepository extends JpaRepository<Booking, Long>, JpaSpec
 
     @Query("""
             SELECT
-            COUNT(b.id) as total,
-            SUM(CASE WHEN b.bookingStatus = 'BOOKED' THEN 1 ELSE 0 END) as booked,
-            SUM(CASE WHEN b.bookingStatus = 'ACTIVE' THEN 1 ELSE 0 END) as activeTrips,
-            SUM(CASE WHEN b.bookingStatus = 'COMPLETED' THEN 1 ELSE 0 END) as completed,
-            SUM(CASE WHEN b.bookingStatus = 'CANCELLED' THEN 1 ELSE 0 END) as cancelled,
-            SUM(CASE WHEN b.bookingStatus = 'RETURNED' THEN 1 ELSE 0 END) as returned,
-            SUM(CASE WHEN b.bookingStatus = 'NO_SHOW' THEN 1 ELSE 0 END) as missed
-            FROM Booking b
-            WHERE b.pickupBranch.id = :id
+                     COUNT(b.id) as total,
+                     COALESCE(SUM(CASE WHEN b.bookingStatus = 'BOOKED' THEN 1 ELSE 0 END), 0) as booked,
+                     COALESCE(SUM(CASE WHEN b.bookingStatus = 'ACTIVE' THEN 1 ELSE 0 END), 0) as activeTrips,
+                     COALESCE(SUM(CASE WHEN b.bookingStatus = 'COMPLETED' THEN 1 ELSE 0 END), 0) as completed,
+                     COALESCE(SUM(CASE WHEN b.bookingStatus = 'CANCELLED' THEN 1 ELSE 0 END), 0) as cancelled,
+                     COALESCE(SUM(CASE WHEN b.bookingStatus = 'RETURNED' THEN 1 ELSE 0 END), 0) as returned,
+                     COALESCE(SUM(CASE WHEN b.bookingStatus = 'NO_SHOW' THEN 1 ELSE 0 END), 0) as missed
+                 FROM Booking b
+                 WHERE b.pickupBranch.id = :id
             """)
     BookingStatsDto fetchEmployeeBookingStats(long id);
 

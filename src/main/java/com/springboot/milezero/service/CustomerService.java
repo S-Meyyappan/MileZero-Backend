@@ -93,13 +93,15 @@ public class CustomerService {
         customer.setLicenseExpiryDate(licenseExpiryDate);
         customer.setInsurancePolicyNo(insurancePolicyNo);
 
-        // Validate image
-        UploadUtility.validateImage(imageFile);
+        if(imageFile!= null && !imageFile.isEmpty()){
+            // Validate image
+            UploadUtility.validateImage(imageFile);
 
-        // Upload image
-        String imageUrl = UploadUtility.saveImage(imageFile, UPLOAD_DIR);
+            // Upload image
+            String imageUrl = UploadUtility.saveImage(imageFile, UPLOAD_DIR);
 
-        customer.setLicensePhoto(imageUrl);
+            customer.setLicensePhoto(imageUrl);
+        }
 
         customerRepository.save(customer);
     }

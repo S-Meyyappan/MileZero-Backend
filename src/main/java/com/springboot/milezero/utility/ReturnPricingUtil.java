@@ -42,6 +42,7 @@ public class ReturnPricingUtil {
         if(duration.isNegative() || duration.isZero()){
             return BigDecimal.ZERO;
         }
+
         // If return is late more than day calc on basis of day else on basis of hours
         BigDecimal extraBaseFee = days.compareTo(BigDecimal.ONE) >= 0
                 ? bookingPricingUtil.calculateBasePriceForDaily(booking.getCategory(), extraKm, days)

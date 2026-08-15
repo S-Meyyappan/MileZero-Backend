@@ -118,7 +118,6 @@ public class EmployeeService {
         employeeRepository.save(employee);
     }
 
-
     public void delete(long id) {
         Employee employee = employeeRepository.fetchById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Employee Id Invalid"));
@@ -140,6 +139,7 @@ public class EmployeeService {
 
         employeeRepository.save(employee);
     }
+
     public EmployeeDashboardDto getMeDashboard(String email) {
         Employee employee = employeeRepository.fetchByEmail(email)
                 .orElseThrow(() -> new ResourceNotFoundException("Employee Email Invalid"));

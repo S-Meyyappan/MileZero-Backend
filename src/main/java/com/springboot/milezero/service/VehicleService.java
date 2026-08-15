@@ -111,7 +111,6 @@ public class VehicleService {
                 .toList();
     }
 
-
     public Page<VehicleRespDto> getAllByBranch(String email, String search, String brand, String fuelType, String transmission, Integer seats, String category, String currentStatus, int page, int size, FilterSort filterSort) {
         Employee employee = employeeRepository.fetchByEmail(email)
                 .orElseThrow(() -> new ResourceNotFoundException("Employee Invalid"));
